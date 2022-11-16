@@ -26,9 +26,13 @@ const freedomFighterSchema = mongoose.Schema({
         minLength: [6, "Mobile number must be 6 digits long"]
     },
 
-    photoURL: {
+    photo: {
         type: String,
-        validate: [validator.isURL, "Please provide a valid URL"]
+        trim: true
+    },
+    address: {
+        type: String,
+        required: [true, "Address is required"],
     },
 
     description: {
@@ -37,7 +41,13 @@ const freedomFighterSchema = mongoose.Schema({
 
     status: {
         type: String,
-        enum: ["live", "dead"]
+        enum: ["Alive", "Dead"]
+    },
+
+    force: {
+        type: String,
+        required: [true, "Force is required"],
+        enum: ["Army", "Navy", "Air Force"]
     },
 
     officialRank: {
@@ -45,7 +55,7 @@ const freedomFighterSchema = mongoose.Schema({
             type: String,
             required: [true, "Official Rank is required"],
             minLength: [3, "Designation must be at least 3 characters long"],
-            enum: ["Lt.Colonel", "Brigadier General", "Major", "Colonel", "Major General"],
+            enum: ["Lt. Colonel", "Brigadier General", "Major", "Colonel", "Major General"],
         },
         point: {
             type: Number,

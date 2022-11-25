@@ -1,5 +1,5 @@
 const FreedomFighter = require('../models/FreedomFighter');
-const { insertFreedomFighterService, updateFreedomFighterByIdService, deleteFreedomFighterByIdService } = require('../services/freedomFighter.service');
+const { insertFreedomFighterService, updateFreedomFighterByIdService, deleteFreedomFighterByIdService, getFreedomFightersService } = require('../services/freedomFighter.service');
 
 // const multer = require('multer');
 
@@ -46,10 +46,11 @@ exports.insertFreedomFighter = async (req, res) => {
 exports.getFreedomFighters = async (req, res) => {
     try {
         // const result = await FreedomFighter.find().lean()
-        const fighters = await FreedomFighter.find({}).limit(2)
+        const fightersData = await getFreedomFightersService(req)
         // const result = await fighters.json();
+        // console.log(fightersData);
 
-        res.status(200).json(fighters)
+        res.status(200).json(fightersData)
 
         // res.status(200).json({
         //     status: 'success',

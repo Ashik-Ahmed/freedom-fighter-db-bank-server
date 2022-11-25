@@ -110,10 +110,10 @@ const freedomFighterSchema = mongoose.Schema({
         }
     },
 
-    // successor: {
-    //     type: ObjectId,
-    //     ref: Successor
-    // }
+    successor: [{
+        type: ObjectId,
+        ref: 'Successor'
+    }]
 
 },
 

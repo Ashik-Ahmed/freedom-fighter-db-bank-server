@@ -10,6 +10,28 @@ exports.insertFreedomFighterService = async (freedomFighterInfo) => {
 }
 
 
+//get all freedom fighters
+exports.getFreedomFightersService = async (req) => {
+
+    const { page = 1, limit = 10 } = req.query;
+
+    console.log(req.query)
+
+    const queryObject = req.query;
+
+    const excludeFields = ['page', 'limit', 'sort'];
+
+    excludeFields.forEach(field => delete queryObject[field])
+    // console.log('page:' + page + ' limit:' + limit, +'filter:' + status);
+
+    const freedomFighters = await FreedomFighter.find(queryObject).skip((page - 1) * limit).limit(limit);
+
+    const totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
+
+    // console.log(freedomFighters);
+    return { totalFreedomFighterCount, freedomFighters };
+}
+
 
 // update a freedom fighter 
 exports.updateFreedomFighterByIdService = async (freedomFighterId, data) => {

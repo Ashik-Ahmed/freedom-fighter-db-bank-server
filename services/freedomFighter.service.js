@@ -15,14 +15,11 @@ exports.getFreedomFightersService = async (req) => {
 
     const { page = 1, limit = 10 } = req.query;
 
-    console.log(req.query)
 
     const queryObject = req.query;
-
     const excludeFields = ['page', 'limit', 'sort'];
 
     excludeFields.forEach(field => delete queryObject[field])
-    // console.log('page:' + page + ' limit:' + limit, +'filter:' + status);
 
     const freedomFighters = await FreedomFighter.find(queryObject).skip((page - 1) * limit).limit(limit);
 

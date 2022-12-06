@@ -53,7 +53,6 @@ exports.login = async (req, res) => {
         }
 
         const user = await findUserByEmail(email);
-        console.log(user);
 
         if (!user) {
             return res.status(401).json({
@@ -72,12 +71,13 @@ exports.login = async (req, res) => {
         }
 
         const token = generateToken(user);
+        const { password: pwd, ...others } = user.toObject();
 
         res.status(200).json({
             status: 'success',
             message: 'Successfully logged in',
             data: {
-                user,
+                user: others,
                 token
             }
         })

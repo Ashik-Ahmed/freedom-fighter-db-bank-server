@@ -5,9 +5,10 @@ const { getSelectedFreedomFightersService } = require("../services/selection.ser
 exports.selectFreedomFighters = async (req, res) => {
     try {
 
-        const { total, alive, dead } = req.query;
+        // const { total, alive, dead } = req.query;
+        // const { total, firstCriteria, secondCriteria } = req.query;
 
-        const selectedFreedomFighters = await getSelectedFreedomFightersService(total)
+        const selectedFreedomFighters = await getSelectedFreedomFightersService(req.query)
 
         // console.log(selectedFreedomFighters)
 

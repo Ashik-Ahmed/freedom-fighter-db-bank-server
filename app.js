@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 //middleware
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }))
 
 // routes 
 const userRoute = require('./routes/user.route');

@@ -2,7 +2,27 @@ const FreedomFighter = require('../models/FreedomFighter');
 
 
 // insert a new freedom fighter 
-exports.insertFreedomFighterService = async (freedomFighterInfo) => {
+exports.insertFreedomFighterService = async (req) => {
+
+    // console.log(req)
+    const freedomFighterInfo = new FreedomFighter({
+        name: req.body?.fullName,
+        email: req.body?.email,
+        mobile: req.body?.contact,
+        photo: req.file?.filename,
+        address: req.body?.address,
+        country: req.body?.country,
+        description: req.body?.description,
+        status: req.body?.status,
+        force: req.body?.force,
+        officialRank: { rank: req.body?.officialRank, point: 20 },
+        birthday: req.body?.birthday,
+        freedomFighterRank: { rank: req.body?.freedomFighterRank, point: 15 },
+        invited: req.body?.invited,
+        facilitiesAvailed: req.body?.facilitiesAvailed,
+        complaints: req.body?.complaints,
+        successor: req.body?.successor,
+    })
 
     var freedomFighter = await FreedomFighter.create(freedomFighterInfo);
 

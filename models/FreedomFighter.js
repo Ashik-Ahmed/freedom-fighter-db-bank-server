@@ -30,6 +30,8 @@ const freedomFighterSchema = mongoose.Schema({
         type: String,
         trim: true
     },
+    profilePhoto: {
+    },
     address: {
         type: String,
         required: [true, "Address is required"],

@@ -1,5 +1,7 @@
 const FreedomFighter = require('../models/FreedomFighter');
 const { insertFreedomFighterService, updateFreedomFighterByIdService, deleteFreedomFighterByIdService, getFreedomFightersService } = require('../services/freedomFighter.service');
+const fs = require('fs')
+
 
 // const multer = require('multer');
 
@@ -24,8 +26,11 @@ exports.profilePhotoUpload = async (req, res) => {
 
 // insert a new freedom fighter
 exports.insertFreedomFighter = async (req, res) => {
+
     try {
-        const freedomFighter = await insertFreedomFighterService(req.body)
+
+
+        const freedomFighter = await insertFreedomFighterService(req)
 
         res.status(200).json({
             status: 'success',
@@ -35,7 +40,7 @@ exports.insertFreedomFighter = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             status: 'failed',
-            error
+            error: error.message
         })
     }
     // console.log(req.body)
@@ -69,10 +74,29 @@ exports.getFreedomFighters = async (req, res) => {
 exports.getSingleFreedomFighter = async (req, res) => {
     try {
         const { id } = req.params;
-        const fighters = await FreedomFighter.find({ _id: id })
+        const fighter = await FreedomFighter.find({ _id: id })
         // const result = await fighters.json();
 
-        res.status(200).json(fighters)
+        if (fighter[0].photo) {
+            const image = fs.readFileSync(`profilePhotos/${fighter[0]?.photo}`, (err, data) => {
+                if (err) {
+                    res.write('Failed to load file');
+                    res.end();
+                }
+                else {
+                    res.write(data);
+                    // console.log(data);
+                    // fighter[0].profilePhoto = data;
+                    // console.log(fighter[0].photo)
+                    res.end()
+                }
+            })
+            fighter[0].profilePhoto = image;
+            // fighter.photo = image;
+            // console.log(fighter[0]);
+        }
+
+        res.status(200).json(fighter)
 
         // res.status(200).json({
         //     status: 'success',

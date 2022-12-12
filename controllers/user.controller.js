@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { createUserService, findUserByEmail } = require("../services/user.service");
+const { createUserService, findUserByEmail, deleteUserByIdService } = require("../services/user.service");
 const { generateToken } = require("../utils/token");
 
 
@@ -29,6 +29,25 @@ exports.getAllUsers = async (req, res) => {
         res.status(200).json({
             status: 'success',
             data: users
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: 'failed',
+            error: 'Internal Server Error',
+        })
+    }
+}
+
+
+//delete a user
+exports.deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await deleteUserByIdService(id)
+
+        res.status(200).json({
+            status: 'success',
+            data: result
         })
     } catch (error) {
         res.status(500).json({

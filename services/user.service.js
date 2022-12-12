@@ -14,3 +14,11 @@ exports.findUserByEmail = async (email) => {
     const user = await User.findOne({ email });
     return user
 }
+
+
+//delete a user
+exports.deleteUserByIdService = async (id) => {
+    // console.log(id)
+    const result = await User.deleteOne({ _id: id })
+    return result;
+}

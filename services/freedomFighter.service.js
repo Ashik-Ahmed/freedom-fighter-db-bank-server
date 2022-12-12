@@ -4,7 +4,7 @@ const FreedomFighter = require('../models/FreedomFighter');
 // insert a new freedom fighter 
 exports.insertFreedomFighterService = async (req) => {
 
-    // console.log(req)
+    // console.log(req.url)
     const freedomFighterInfo = new FreedomFighter({
         name: req.body?.fullName,
         email: req.body?.email,
@@ -27,6 +27,7 @@ exports.insertFreedomFighterService = async (req) => {
     var freedomFighter = await FreedomFighter.create(freedomFighterInfo);
 
     return freedomFighter;
+
 }
 
 

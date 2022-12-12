@@ -6,13 +6,16 @@ const authorization = require('../middleware/authorization');
 const router = express.Router();
 
 
+router.post('/login', userController.login);
+
+router.get('/getLoggedInUser', verifyToken, userController.getLoggedInUser);
 
 router.route('/')
     .post(verifyToken, authorization('admin'), userController.createUser)
     .get(verifyToken, authorization('admin'), userController.getAllUsers)
 
-router.post('/login', userController.login);
+router.route('/:id')
+    .delete(verifyToken, authorization('admin'), userController.deleteUser)
 
-router.get('/getLoggedInUser', verifyToken, userController.getLoggedInUser);
 
 module.exports = router;

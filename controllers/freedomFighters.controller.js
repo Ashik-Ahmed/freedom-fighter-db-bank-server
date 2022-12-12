@@ -29,19 +29,31 @@ exports.insertFreedomFighter = async (req, res) => {
 
     try {
 
+        // console.log(req)
 
         const freedomFighter = await insertFreedomFighterService(req)
 
-        res.status(200).json({
-            status: 'success',
-            message: 'Successfully inserted freedom fighter',
-            data: freedomFighter,
-        })
+        console.log(freedomFighter);
+
+        res.writeHead(200, { 'content-type': 'text/html' });
+        res.write('<p>Succefully Inserted..</p>');
+        res.end();
+
+        // res.status(200).json({
+        //     status: 'success',
+        //     message: 'Successfully inserted freedom fighter',
+        //     data: freedomFighter,
+        // })
     } catch (error) {
-        res.status(500).json({
-            status: 'failed',
-            error: error.message
-        })
+
+        res.writeHead(500, { 'content-type': 'text/html' });
+        res.write(error.message);
+        res.end();
+
+        // res.status(500).json({
+        //     status: 'failed',
+        //     error: error.message
+        // })
     }
     // console.log(req.body)
     // res.send('success')

@@ -10,6 +10,8 @@ router.post('/login', userController.login);
 
 router.get('/getLoggedInUser', verifyToken, userController.getLoggedInUser);
 
+router.patch('/updateRole', verifyToken, authorization('admin'), userController.updateRole);
+
 router.route('/')
     .post(verifyToken, authorization('admin'), userController.createUser)
     .get(verifyToken, authorization('admin'), userController.getAllUsers)

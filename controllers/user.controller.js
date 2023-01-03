@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { createUserService, findUserByEmail, deleteUserByIdService } = require("../services/user.service");
+const { createUserService, findUserByEmail, deleteUserByIdService, updateRoleService } = require("../services/user.service");
 const { generateToken } = require("../utils/token");
 
 
@@ -38,6 +38,27 @@ exports.getAllUsers = async (req, res) => {
     }
 }
 
+
+//update user role
+exports.updateRole = async (req, res) => {
+    try {
+        const { id, role } = req.query;
+
+        const result = await updateRoleService(id, role);
+        // console.log(result)
+
+        res.status(200).json({
+            status: 'Success',
+            data: result
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            status: 'failed',
+            error: error.message,
+        })
+    }
+}
 
 //delete a user
 exports.deleteUser = async (req, res) => {
@@ -109,7 +130,6 @@ exports.login = async (req, res) => {
     }
 
 }
-
 
 
 // get logged in user 

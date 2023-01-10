@@ -7,10 +7,9 @@ const router = express.Router();
 
 
 router.post('/login', userController.login);
-
 router.get('/getLoggedInUser', verifyToken, userController.getLoggedInUser);
-
-router.patch('/updateRole', verifyToken, authorization('admin'), userController.updateRole);
+router.patch('/updateRole/:id', verifyToken, authorization('admin'), userController.updateProfile);
+router.patch('/updateUserProfile/:id', verifyToken, userController.updateProfile);
 
 router.route('/')
     .post(verifyToken, authorization('admin'), userController.createUser)

@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { createUserService, findUserByEmail, deleteUserByIdService, updateRoleService } = require("../services/user.service");
+const { createUserService, findUserByEmail, deleteUserByIdService, updateRoleService, updateProfileService } = require("../services/user.service");
 const { generateToken } = require("../utils/token");
 
 
@@ -7,6 +7,7 @@ const { generateToken } = require("../utils/token");
 exports.createUser = async (req, res) => {
     try {
         const user = await createUserService(req.body);
+        console.log(user)
 
         res.status(200).json({
             status: 'success',
@@ -40,12 +41,13 @@ exports.getAllUsers = async (req, res) => {
 
 
 //update user role
-exports.updateRole = async (req, res) => {
+exports.updateProfile = async (req, res) => {
     try {
-        const { id, role } = req.query;
+        const { id } = req.params;
+        const info = req.body;
 
-        const result = await updateRoleService(id, role);
-        // console.log(result)
+        const result = await updateProfileService(id, info);
+        // console.log(req.body)
 
         res.status(200).json({
             status: 'Success',

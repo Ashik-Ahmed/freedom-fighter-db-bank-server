@@ -43,7 +43,14 @@ exports.getFreedomFightersService = async (req) => {
     const excludeFields = ['page', 'limit', 'sort'];
     excludeFields.forEach(field => delete queryObject[field])
 
-    const freedomFighters = await FreedomFighter.find(queryObject).skip((page - 1) * limit).limit(limit);
+    // const freedomFighters = await FreedomFighter.find(queryObject).skip((page - 1) * limit).limit(limit);
+
+    // using aggregation 
+    const freedomFighters = await FreedomFighter.aggregate([
+        { $match: queryObject },
+        { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+    ]);
+
 
     const totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
 

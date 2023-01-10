@@ -22,8 +22,8 @@ const userSchema = mongoose.Schema(
 
         role: {
             type: String,
-            enum: ['Admin', 'User'],
-            default: 'User',
+            enum: ['admin', 'user'],
+            default: 'user',
         },
 
         name: {
@@ -32,6 +32,24 @@ const userSchema = mongoose.Schema(
             trim: true,
             minLength: [3, 'Name must be at least 3 characters'],
             maxLength: [60, 'Name length  is too large'],
+        },
+
+        mobile: {
+            type: String,
+            minLength: [6, "Mobile number must be 6 digits long"]
+        },
+
+        bio: {
+            type: String,
+        },
+
+        birthday: {
+            type: String,
+        },
+
+        sex: {
+            type: String,
+            enum: ['Male', 'Female']
         },
 
         imageURL: {
@@ -45,7 +63,7 @@ const userSchema = mongoose.Schema(
     },
 
     {
-        timestamps: true,
+        timestamps: false,
     }
 );
 

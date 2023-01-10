@@ -17,10 +17,9 @@ exports.findUserByEmail = async (email) => {
 
 
 // update user role 
-exports.updateRoleService = async (id, role) => {
-    // console.log(id, role);
-    const result = await User.updateOne({ _id: id }, { $set: { role } })
-    console.log(result);
+exports.updateProfileService = async (id, info) => {
+    // console.log(id, info);
+    const result = await User.updateOne({ _id: id }, { $set: info })
     return result;
 }
 

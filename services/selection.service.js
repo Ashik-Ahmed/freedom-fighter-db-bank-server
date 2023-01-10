@@ -21,10 +21,10 @@ exports.getSelectedFreedomFightersService = async (data) => {
         { $limit: parseInt(total) }
     ])
 
-    const url = `{ $match: { invited: { $ne: '2021' }, country: "Bangladesh" } },
-        { $project: { "name": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
-        { $sort: { ${firstCriteria}: -1, ${secondCriteria}: 1 } },
-{ $limit: parseInt(${total}) } `
+    //     const url = `{ $match: { invited: { $ne: '2021' }, country: "Bangladesh" } },
+    //         { $project: { "name": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
+    //         { $sort: { ${firstCriteria}: -1, ${secondCriteria}: 1 } },
+    // { $limit: parseInt(${total}) } `
 
     // console.log(url)
 

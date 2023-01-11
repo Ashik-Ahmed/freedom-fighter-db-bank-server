@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { createUserService, findUserByEmail, deleteUserByIdService, updateRoleService, updateProfileService } = require("../services/user.service");
+const { createUserService, findUserByEmail, deleteUserByIdService, updateProfileService, updatePasswordService } = require("../services/user.service");
 const { generateToken } = require("../utils/token");
 
 
@@ -7,7 +7,7 @@ const { generateToken } = require("../utils/token");
 exports.createUser = async (req, res) => {
     try {
         const user = await createUserService(req.body);
-        console.log(user)
+        // console.log(user)
 
         res.status(200).json({
             status: 'success',
@@ -40,7 +40,7 @@ exports.getAllUsers = async (req, res) => {
 }
 
 
-//update user role
+//update user Profile
 exports.updateProfile = async (req, res) => {
     try {
         const { id } = req.params;
@@ -58,6 +58,46 @@ exports.updateProfile = async (req, res) => {
         res.status(500).json({
             status: 'failed',
             error: error.message,
+        })
+    }
+}
+
+// update user password 
+exports.updatePassword = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+
+        //compare new passwords
+        if (newPassword != confirmPassword) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "New password didn't match"
+            })
+        }
+
+        const user = await findUserByEmail(email)
+
+        const isPasswordMatched = user.comparePassword(currentPassword, user.password);
+        if (!isPasswordMatched) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Current password is wrong"
+            })
+        }
+
+        const result = await updatePasswordService(email, req.body.newPassword);
+        console.log(result);
+
+        return res.status(200).json({
+            status: 'success',
+            data: result
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            status: 'failed',
+            message: error.message,
         })
     }
 }

@@ -1,4 +1,5 @@
 const User = require("../models/User")
+const bcrypt = require('bcryptjs');
 
 
 //create a new user
@@ -16,11 +17,21 @@ exports.findUserByEmail = async (email) => {
 }
 
 
-// update user role 
+// update user profile 
 exports.updateProfileService = async (id, info) => {
     // console.log(id, info);
     const result = await User.updateOne({ _id: id }, { $set: info })
     return result;
+}
+
+//update user password
+exports.updatePasswordService = async (email, newPassword) => {
+    const hashedPassword = bcrypt.hashSync(newPassword);
+    const result = await User.updateOne({ email }, { $set: { password: hashedPassword } })
+    console.log(result);
+    return result;
+
+    // console.log(email, currentPassword, newPassword, confirmPassword);
 }
 
 //delete a user

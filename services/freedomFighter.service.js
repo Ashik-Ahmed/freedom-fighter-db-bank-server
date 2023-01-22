@@ -6,6 +6,7 @@ exports.insertFreedomFighterService = async (req) => {
 
     // console.log(req.url)
     const freedomFighterInfo = new FreedomFighter({
+        memberType: req.body?.type,
         name: req.body?.fullName,
         email: req.body?.email,
         mobile: req.body?.contact,
@@ -24,9 +25,12 @@ exports.insertFreedomFighterService = async (req) => {
         successor: req.body?.successor,
     })
 
-    var freedomFighter = await FreedomFighter.create(freedomFighterInfo);
+    console.log(freedomFighterInfo)
 
-    return freedomFighter;
+    // var freedomFighter = await FreedomFighter.create(freedomFighterInfo);
+
+    // console.log(freedomFighter);
+    // return freedomFighter;
 
 }
 
@@ -34,27 +38,77 @@ exports.insertFreedomFighterService = async (req) => {
 //get all freedom fighters
 exports.getFreedomFightersService = async (req) => {
 
-    const { page = 1, limit = 10 } = req.query;
+    const { page, limit = 10, force } = req.query
+    console.log(req.query)
+
+    // console.log('path hit2');
+    // const { page = 0, limit = 10 } = JSON.parse(req.query.data);
+    // const { filters } = JSON.parse(req.query.filter)
+    // console.log(req.query.data);
+    // console.log(page, limit, force, search);
+    // const queryObject = req.query.data;
 
 
     const queryObject = req.query;
-
     //exclude page limit sort from query
     const excludeFields = ['page', 'limit', 'sort'];
     excludeFields.forEach(field => delete queryObject[field])
 
+    // console.log(queryObject);
+
     // const freedomFighters = await FreedomFighter.find(queryObject).skip((page - 1) * limit).limit(limit);
 
-    // using aggregation 
-    const freedomFighters = await FreedomFighter.aggregate([
-        { $match: queryObject },
-        { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
-    ]);
+    // console.log(query)
+
+    // using aggregation and pagination
+    // if (force) {
+    //     var freedomFighters = await FreedomFighter.aggregate([
+    //         { $match: queryObject },
+    //         { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } },
+    //         { $skip: ((page - 1) * limit) },
+    //         { $limit: limit }]);
+
+    //     var totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
+    // }
+    // else {
+    //     var freedomFighters = await FreedomFighter.aggregate([
+    //         { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } },
+    //         { $skip: ((page - 1) * limit) },
+    //         { $limit: limit }]);
+
+    //     var totalFreedomFighterCount = await FreedomFighter.find({}).countDocuments();
+    // }
+
+    // var freedomFighters = await FreedomFighter.aggregate([
+    //     { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+    // ])
+
+    //without pagination
+
+    if (queryObject) {
+        var freedomFighters = await FreedomFighter.aggregate([
+            { $match: queryObject },
+            { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+        ])
+
+        var totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
+    }
+
+    else {
+        var freedomFighters = await FreedomFighter.aggregate([
+            { $match: queryObject },
+            { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+        ])
+
+        var totalFreedomFighterCount = await FreedomFighter.find({}).countDocuments();
+    }
+
+    // console.log(freedomFighters)
 
 
-    const totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
+    // const totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
 
-    // console.log(freedomFighters);
+    console.log(totalFreedomFighterCount);
     return { totalFreedomFighterCount, freedomFighters };
 }
 

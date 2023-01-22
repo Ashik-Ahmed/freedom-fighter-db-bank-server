@@ -33,7 +33,7 @@ exports.insertFreedomFighter = async (req, res) => {
 
         const freedomFighter = await insertFreedomFighterService(req)
 
-        console.log(freedomFighter);
+        // console.log(freedomFighter);
 
         res.writeHead(200, { 'content-type': 'text/html' });
         res.write('<p>Succefully Inserted..</p>');

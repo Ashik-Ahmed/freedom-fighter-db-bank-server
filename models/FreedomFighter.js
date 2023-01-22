@@ -4,6 +4,10 @@ const { ObjectId } = mongoose.Schema.Types;
 
 
 const freedomFighterSchema = mongoose.Schema({
+    memberType: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: [true, 'Name is required'],

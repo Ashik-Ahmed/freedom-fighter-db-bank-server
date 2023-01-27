@@ -4,9 +4,9 @@ const FreedomFighter = require("../models/FreedomFighter");
 //get selected freedom fighters
 exports.getSelectedFreedomFightersService = async (data) => {
 
-    const { total, firstCriteria, secondCriteria, thirdCriteria, exclude } = data;
+    const { total, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear } = data;
 
-    // console.log(total, firstCriteria, secondCriteria, thirdCriteria, exclude);
+    // console.log(total, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);
 
     // const selectedFreedomFighters = await FreedomFighter.aggregate([
     //     { $match: { invited: { $ne: '2021' }, country: "Bangladesh" } },
@@ -15,29 +15,25 @@ exports.getSelectedFreedomFightersService = async (data) => {
     //     { $limit: parseInt(total) }
     // ])
 
-    var query = '';
-
-    if (exclude == 'false') {
-        query = { $project: { "name": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
+    if (excludePreviousYear == 'false') {
+        var selectedFreedomFighters = await FreedomFighter.aggregate([
+            { $project: { "name": 1, "force": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
             { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
             { $limit: parseInt(total) }
+        ])
     }
 
     else {
-        query = { $match: { invited: { $ne: '2021' } } },
-            { $project: { "name": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
+        var selectedFreedomFighters = await FreedomFighter.aggregate([
+            { $match: { invited: { $ne: '2021' } } },
+            { $project: { "name": 1, "force": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
             { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
             { $limit: parseInt(total) }
+        ])
     }
 
-    const selectedFreedomFighters = await FreedomFighter.aggregate([query])
 
-    //     const url = `{ $match: { invited: { $ne: '2021' }, country: "Bangladesh" } },
-    //         { $project: { "name": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
-    //         { $sort: { ${firstCriteria}: -1, ${secondCriteria}: 1 } },
-    // { $limit: parseInt(${total}) } `
-
-    // console.log(url)
+    // console.log(selectedFreedomFighters.length)
 
     return selectedFreedomFighters;
 }

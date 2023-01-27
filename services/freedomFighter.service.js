@@ -84,7 +84,6 @@ exports.getFreedomFightersService = async (req) => {
     // ])
 
     //without pagination
-
     if (queryObject) {
         var freedomFighters = await FreedomFighter.aggregate([
             { $match: queryObject },

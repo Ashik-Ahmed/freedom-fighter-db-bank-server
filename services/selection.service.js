@@ -17,7 +17,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
 
     if (excludePreviousYear == 'false') {
         var selectedFreedomFighters = await FreedomFighter.aggregate([
-            { $project: { "name": 1, "force": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
+            { $project: { "name": 1, "force": 1, "invited": 1, "officialRank": "$officialRank.rank", "freedomFighterRank": "$freedomFighterRank.rank", "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
             { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
             { $limit: parseInt(total) }
         ])
@@ -26,7 +26,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
     else {
         var selectedFreedomFighters = await FreedomFighter.aggregate([
             { $match: { invited: { $ne: '2021' } } },
-            { $project: { "name": 1, "force": 1, "invited": 1, "officialRank": 1, "freedomFighterRank": 1, "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
+            { $project: { "name": 1, "force": 1, "invited": 1, "officialRank": "$officialRank.rank", "freedomFighterRank": "$freedomFighterRank.rank", "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },
             { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
             { $limit: parseInt(total) }
         ])

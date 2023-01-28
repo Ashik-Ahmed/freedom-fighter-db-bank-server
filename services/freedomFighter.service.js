@@ -25,7 +25,7 @@ exports.insertFreedomFighterService = async (req) => {
         successor: req.body?.successor,
     })
 
-    console.log(freedomFighterInfo)
+    console.log(req.body.freedomFighterRank)
 
     // var freedomFighter = await FreedomFighter.create(freedomFighterInfo);
 

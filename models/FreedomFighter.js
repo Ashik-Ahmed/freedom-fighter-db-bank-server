@@ -144,13 +144,12 @@ const freedomFighterSchema = mongoose.Schema({
             type: String,
             required: [true, "Freedom Fighter rank is required"],
             minLength: [3, "Designation must be at least 3 characters long"],
-            enum: ["Bir Shreshtho", "Bir Uttam", "Bir Bikrom", "Bir Muktijoddha"]
+            enum: ["Bir Shreshtho", "Bir Bikrom", "Bir Uttam", "Bir Protik", "Bir Muktijoddha"]
         },
 
         point: {
             type: Number,
             required: [true, "Freedom Fighter rank point is required"],
-
             min: [0, "Freedom Fighter Rank point cant be negative"]
 
         }

@@ -1,7 +1,6 @@
 const FreedomFighter = require('../models/FreedomFighter');
 const { insertFreedomFighterService, updateFreedomFighterByIdService, deleteFreedomFighterByIdService, getFreedomFightersService } = require('../services/freedomFighter.service');
-const fs = require('fs')
-
+const fs = require('fs');
 
 // const multer = require('multer');
 
@@ -14,7 +13,7 @@ exports.profilePhotoUpload = async (req, res) => {
 
     // res.send(req.file.path)
     try {
-        console.log(req.file.path)
+        // console.log(req.file.path)
         res.status(200).send(req.file.path)
     } catch (error) {
         res.status(500).json({
@@ -29,15 +28,19 @@ exports.insertFreedomFighter = async (req, res) => {
 
     try {
 
-        // console.log(req)
+        const formDataWithFile = req.body;
 
-        const freedomFighter = await insertFreedomFighterService(req)
+        console.log(req?.body, req.file.filename)
 
+        // const freedomFighter = await insertFreedomFighterService(req)
         // console.log(freedomFighter);
 
-        res.writeHead(200, { 'content-type': 'text/html' });
-        res.write('<p>Succefully Inserted..</p>');
-        res.end();
+        // res.writeHead(200, { 'content-type': 'text/html' });
+        // res.write('<p>Succefully Inserted..</p>');
+        // res.end();
+
+
+
 
         // res.status(200).json({
         //     status: 'success',
@@ -45,6 +48,7 @@ exports.insertFreedomFighter = async (req, res) => {
         //     data: freedomFighter,
         // })
     } catch (error) {
+        console.log(error.message)
 
         res.writeHead(500, { 'content-type': 'text/html' });
         res.write(error.message);

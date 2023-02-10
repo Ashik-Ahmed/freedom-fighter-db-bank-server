@@ -17,6 +17,7 @@ const Storage = multer.diskStorage({
 const uploader = multer({
     storage: Storage,
     fileFilter: (req, file, cb) => {
+        console.log('file uploaded');
         const supportedFile = /png|jpg|jpeg/;
         const extension = path.extname(file.originalname);
 

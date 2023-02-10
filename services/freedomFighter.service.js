@@ -4,7 +4,7 @@ const FreedomFighter = require('../models/FreedomFighter');
 // insert a new freedom fighter 
 exports.insertFreedomFighterService = async (req) => {
 
-    // console.log(req.url)
+    console.log("fighterRank:", JSON.parse(req.body?.freedomFighterRank))
     const freedomFighterInfo = new FreedomFighter({
         memberType: req.body?.type,
         name: req.body?.fullName,
@@ -18,14 +18,14 @@ exports.insertFreedomFighterService = async (req) => {
         force: req.body?.force,
         officialRank: { rank: req.body?.officialRank, point: 20 },
         birthday: req.body?.birthday,
-        freedomFighterRank: { rank: req.body?.freedomFighterRank, point: 15 },
+        freedomFighterRank: JSON.parse(req.body.freedomFighterRank),
         invited: req.body?.invited,
         facilitiesAvailed: req.body?.facilitiesAvailed,
         complaints: req.body?.complaints,
         successor: req.body?.successor,
     })
 
-    console.log(req.body.freedomFighterRank)
+    console.log(freedomFighterInfo)
 
     // var freedomFighter = await FreedomFighter.create(freedomFighterInfo);
 
@@ -39,7 +39,7 @@ exports.insertFreedomFighterService = async (req) => {
 exports.getFreedomFightersService = async (req) => {
 
     const { page, limit = 10, force } = req.query
-    console.log(req.query)
+    // console.log(req.query)
 
     // console.log('path hit2');
     // const { page = 0, limit = 10 } = JSON.parse(req.query.data);
@@ -107,7 +107,7 @@ exports.getFreedomFightersService = async (req) => {
 
     // const totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
 
-    console.log(totalFreedomFighterCount);
+    // console.log(totalFreedomFighterCount);
     return { totalFreedomFighterCount, freedomFighters };
 }
 

@@ -8,7 +8,7 @@ const freedomFighterSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    name: {
+    fullName: {
         type: String,
         required: [true, 'Name is required'],
         trim: true,
@@ -26,7 +26,7 @@ const freedomFighterSchema = mongoose.Schema({
     },
     mobile: {
         type: String,
-        required: [true, "Contact number is required"],
+        required: [true, "Mobile number is required"],
         minLength: [6, "Mobile number must be 6 digits long"]
     },
 

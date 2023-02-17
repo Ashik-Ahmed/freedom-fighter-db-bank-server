@@ -42,22 +42,28 @@ exports.getAllUsers = async (req, res) => {
 
 //update user Profile
 exports.updateProfile = async (req, res) => {
+    console.log('api hit')
     try {
         const { id } = req.params;
-        const info = req.body;
+        // const info = JSON.parse(req.body);
 
-        const result = await updateProfileService(id, info);
-        // console.log(req.body)
+        const { bio } = req.body;
 
-        res.status(200).json({
-            status: 'Success',
-            data: result
-        })
+
+        console.log(id, bio);
+
+        // const result = await updateProfileService(id, info);
+
+        //     res.status(200).json({
+        //         status: 'Success',
+        //         data: result
+        //     })
 
     } catch (error) {
         res.status(500).json({
             status: 'failed',
-            error: error.message,
+            // error: error.message,
+            error: 'Operation Failed'
         })
     }
 }

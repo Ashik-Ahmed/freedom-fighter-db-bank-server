@@ -33,7 +33,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
     }
 
 
-    console.log(firstCriteria, selectedFreedomFighters)
+    // console.log(firstCriteria, selectedFreedomFighters)
 
     return selectedFreedomFighters;
 }

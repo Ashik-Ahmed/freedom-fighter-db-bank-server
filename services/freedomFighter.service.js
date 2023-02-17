@@ -4,33 +4,42 @@ const FreedomFighter = require('../models/FreedomFighter');
 // insert a new freedom fighter 
 exports.insertFreedomFighterService = async (req) => {
 
-    console.log("fighterRank:", JSON.parse(req.body?.freedomFighterRank))
-    const freedomFighterInfo = new FreedomFighter({
-        memberType: req.body?.type,
-        name: req.body?.fullName,
-        email: req.body?.email,
-        mobile: req.body?.contact,
-        photo: req.file?.filename,
-        address: req.body?.address,
-        country: req.body?.country,
-        description: req.body?.description,
-        status: req.body?.status,
-        force: req.body?.force,
-        officialRank: { rank: req.body?.officialRank, point: 20 },
-        birthday: req.body?.birthday,
-        freedomFighterRank: JSON.parse(req.body.freedomFighterRank),
-        invited: req.body?.invited,
-        facilitiesAvailed: req.body?.facilitiesAvailed,
-        complaints: req.body?.complaints,
-        successor: req.body?.successor,
-    })
+    // console.log("fighterRank:", JSON.parse(req.body?.freedomFighterRank))
+    // const freedomFighterInfo = new FreedomFighter({
+    //     memberType: req.body?.type,
+    //     name: req.body?.fullName,
+    //     email: req.body?.email,
+    //     mobile: req.body?.contact,
+    //     photo: req.file?.filename,
+    //     address: req.body?.address,
+    //     country: req.body?.country,
+    //     description: req.body?.description,
+    //     status: req.body?.status,
+    //     force: req.body?.force,
+    //     officialRank: { rank: req.body?.officialRank, point: 20 },
+    //     birthday: req.body?.birthday,
+    //     freedomFighterRank: JSON.parse(req.body.freedomFighterRank),
+    //     invited: req.body?.invited,
+    //     facilitiesAvailed: req.body?.facilitiesAvailed,
+    //     complaints: req.body?.complaints,
+    //     successor: req.body?.successor,
+    // })
 
-    console.log(freedomFighterInfo)
+    // console.log(freedomFighterInfo)
 
     // var freedomFighter = await FreedomFighter.create(freedomFighterInfo);
 
     // console.log(freedomFighter);
     // return freedomFighter;
+
+
+
+    const info = req.body
+    const memberInfo = new FreedomFighter(info)
+    console.log(JSON.parse(info))
+    var result = await FreedomFighter.create(memberInfo);
+    console.log(result)
+    return result;
 
 }
 

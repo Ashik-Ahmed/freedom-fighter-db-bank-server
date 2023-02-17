@@ -30,9 +30,10 @@ exports.insertFreedomFighter = async (req, res) => {
 
         const formDataWithFile = req.body;
 
-        console.log(req?.body, req.file.filename)
+        // console.log('printing file Name');
+        // console.log(req?.body, req.file.filename)
 
-        // const freedomFighter = await insertFreedomFighterService(req)
+        const freedomFighter = await insertFreedomFighterService(req)
         // console.log(freedomFighter);
 
         // res.writeHead(200, { 'content-type': 'text/html' });

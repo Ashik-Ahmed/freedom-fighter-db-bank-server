@@ -25,7 +25,7 @@ router.route('/profilePhotoUpload')
 
 router.route('/')
     // .post(uploader.single('photo'), freedomFighterController.insertFreedomFighter)
-    .post(uploader.single('photo'), freedomFighterController.insertFreedomFighter)
+    .post(uploader.single('file'), freedomFighterController.insertFreedomFighter)
     .get(freedomFighterController.getFreedomFighters)
 
 router.route('/:id')

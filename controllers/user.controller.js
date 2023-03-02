@@ -7,7 +7,6 @@ const { generateToken } = require("../utils/token");
 exports.createUser = async (req, res) => {
     try {
         const user = await createUserService(req.body);
-        // console.log(user)
 
         res.status(200).json({
             status: 'success',
@@ -19,14 +18,12 @@ exports.createUser = async (req, res) => {
             error: error.message
         })
     }
-
 }
 
 // get all users from DB 
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find({})
-
         res.status(200).json({
             status: 'success',
             data: users
@@ -42,15 +39,9 @@ exports.getAllUsers = async (req, res) => {
 
 //update user Profile
 exports.updateProfile = async (req, res) => {
-    console.log('api hit')
     try {
         const { id } = req.params;
-        // const info = JSON.parse(req.body);
-
         const { bio } = req.body;
-
-
-        console.log(id, bio);
 
         // const result = await updateProfileService(id, info);
 
@@ -93,7 +84,6 @@ exports.updatePassword = async (req, res) => {
         }
 
         const result = await updatePasswordService(email, req.body.newPassword);
-        console.log(result);
 
         return res.status(200).json({
             status: 'success',
@@ -176,16 +166,13 @@ exports.login = async (req, res) => {
             error: 'Internal server error ',
         })
     }
-
 }
-
 
 // get logged in user 
 exports.getLoggedInUser = async (req, res) => {
     try {
 
         const user = await findUserByEmail(req.user?.email);
-
         const { password, ...others } = user.toObject();
 
         res.status(200).json({

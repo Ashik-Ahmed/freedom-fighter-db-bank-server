@@ -110,20 +110,12 @@ exports.getFreedomFightersService = async (req) => {
 
         var totalFreedomFighterCount = await FreedomFighter.find({}).countDocuments();
     }
-
-    // console.log(freedomFighters)
-
-
-    // const totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
-
-    // console.log(totalFreedomFighterCount);
     return { totalFreedomFighterCount, freedomFighters };
 }
 
 
 // update a freedom fighter 
 exports.updateFreedomFighterByIdService = async (freedomFighterId, data) => {
-    // console.log(freedomFighterId, data)
     const result = await FreedomFighter.updateOne({ _id: freedomFighterId }, { $set: data });
     return result;
 }

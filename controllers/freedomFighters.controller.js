@@ -2,12 +2,6 @@ const FreedomFighter = require('../models/FreedomFighter');
 const { insertFreedomFighterService, updateFreedomFighterByIdService, deleteFreedomFighterByIdService, getFreedomFightersService } = require('../services/freedomFighter.service');
 const fs = require('fs');
 
-// const multer = require('multer');
-
-// const uploader = multer({
-//     dest: './profilePhotos/'
-// })
-
 // upload profile photo
 exports.profilePhotoUpload = async (req, res) => {
 
@@ -29,19 +23,10 @@ exports.insertFreedomFighter = async (req, res) => {
     try {
 
         const formDataWithFile = req.body;
-
         // console.log('printing file Name');
         // console.log(req?.body, req.file.filename)
 
         const freedomFighter = await insertFreedomFighterService(req)
-        // console.log(freedomFighter);
-
-        // res.writeHead(200, { 'content-type': 'text/html' });
-        // res.write('<p>Succefully Inserted..</p>');
-        // res.end();
-
-
-
 
         // res.status(200).json({
         //     status: 'success',
@@ -67,9 +52,7 @@ exports.insertFreedomFighter = async (req, res) => {
 // get freedom fighters from database 
 exports.getFreedomFighters = async (req, res) => {
     try {
-        // const result = await FreedomFighter.find().lean()
         const fightersData = await getFreedomFightersService(req)
-        // const result = await fighters.json();
         // console.log(fightersData);
 
         res.status(200).json(fightersData)
@@ -92,7 +75,6 @@ exports.getSingleFreedomFighter = async (req, res) => {
     try {
         const { id } = req.params;
         const fighter = await FreedomFighter.find({ _id: id })
-        // const result = await fighters.json();
 
         if (fighter[0].photo) {
             const image = fs.readFileSync(`profilePhotos/${fighter[0]?.photo}`, (err, data) => {
@@ -109,8 +91,6 @@ exports.getSingleFreedomFighter = async (req, res) => {
                 }
             })
             fighter[0].profilePhoto = image;
-            // fighter.photo = image;
-            // console.log(fighter[0]);
         }
 
         res.status(200).json(fighter)

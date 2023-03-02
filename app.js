@@ -14,6 +14,7 @@ const userRoute = require('./routes/user.route');
 const freedomFighterRoute = require('./routes/freedomFighters.route')
 const successorRoute = require('./routes/successor.route')
 const selectionRoute = require('./routes/selection.route')
+const eventRoute = require('./routes/event.route')
 
 
 app.get('/', (req, res) => {
@@ -25,6 +26,7 @@ app.use('/api/v1/users', userRoute)
 app.use('/api/v1/freedomFighters', freedomFighterRoute)
 app.use('/api/v1/successor', successorRoute)
 app.use('/api/v1/selection', selectionRoute)
+app.use('/api/v1/event', eventRoute)
 
 
 

@@ -1,8 +1,14 @@
 const express = require('express');
+const eventController = require('../controllers/event.controller');
+const authorization = require('../middleware/authorization');
+const verifyToken = require('../middleware/verifyToken');
 
 
 const router = express.Router();
 
 router.route('/')
-    .get()
-    .post()
+    .get(eventController.getAllevents)
+    .post(verifyToken, authorization('admin'))
+
+
+module.exports = router;

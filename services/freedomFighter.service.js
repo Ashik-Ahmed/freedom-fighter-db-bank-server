@@ -37,9 +37,9 @@ exports.insertFreedomFighterService = async (req) => {
     const info = req.body
     const memberInfo = new FreedomFighter(info)
     console.log(info)
-    // var result = await FreedomFighter.create(memberInfo);
-    // console.log(result)
-    // return result;
+    var result = await FreedomFighter.create(memberInfo);
+    console.log(result)
+    return result;
 
 }
 

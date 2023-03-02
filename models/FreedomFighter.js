@@ -160,6 +160,10 @@ const freedomFighterSchema = mongoose.Schema({
         type: Array,
     },
 
+    temporarySelection: {
+        type: String,
+    },
+
     facilitiesAvailed: {
         type: String,
         minLength: [10, "facility details too short"]

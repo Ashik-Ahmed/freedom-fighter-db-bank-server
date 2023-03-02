@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route('/')
     .get(eventController.getAllevents)
-    .post(verifyToken, authorization('admin'))
+    .post(verifyToken, authorization('admin'), eventController.addEvent)
 
 
 module.exports = router;

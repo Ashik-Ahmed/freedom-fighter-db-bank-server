@@ -43,3 +43,7 @@ exports.updateTemporarySelectedMembersService = async (memberIds) => {
     console.log(result2);
     return result2;
 }
+
+exports.getPrimarySelectedMembersService = async (data) => {
+    console.log(data);
+}

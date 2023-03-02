@@ -7,8 +7,10 @@ const router = express.Router();
 router.route('/')
     .get(selectionController.selectFreedomFighters)
 
-router.route('/temporary-selection')
+router.route('/primary-selection')
+    .get(selectionController.getPrimarySelectedMembers)
     .patch(selectionController.temporarySelected)
+
 
 
 module.exports = router;

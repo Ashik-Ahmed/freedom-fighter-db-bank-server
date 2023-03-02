@@ -32,19 +32,19 @@ exports.getSelectedFreedomFightersService = async (data) => {
 
 exports.updateTemporarySelectedMembersService = async (data) => {
     const { memberIds, event, year } = data
-    const result1 = await FreedomFighter.updateMany({ _id: { $in: memberIds } }, { $set: { primarySelection: { event: event, year: year } } }, (err, res) => {
+    const result = await FreedomFighter.updateMany({ _id: { $in: memberIds } }, { $set: { primarySelection: { event: event, year: year } } }, (err, res) => {
         if (err) {
             console.log(err);
         }
         console.log(`${res.nModified} documents updated`);
         console.log(res);
     });
-    const result2 = await FreedomFighter.find({ _id: memberIds });
-    console.log(result1);
-    // console.log(memberIds, event, year);
-    return result2;
+    return result;
 }
 
 exports.getPrimarySelectedMembersService = async (data) => {
-    console.log(data);
+    const result = await FreedomFighter.aggregate([
+        { $match: { primarySelection: data } }
+    ])
+    return result;
 }

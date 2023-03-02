@@ -35,8 +35,6 @@ exports.temporarySelected = async (req, res) => {
 
 exports.getPrimarySelectedMembers = async (req, res) => {
     try {
-        const { event, year } = req.query
-        // console.log(event, year, req.query);
         const result = await getPrimarySelectedMembersService(req.query)
         res.status(200).json({
             status: 'success',

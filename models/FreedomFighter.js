@@ -160,8 +160,13 @@ const freedomFighterSchema = mongoose.Schema({
         type: Array,
     },
 
-    temporarySelection: {
-        type: String,
+    primarySelection: {
+        event: {
+            type: String,
+        },
+        year: {
+            type: String,
+        }
     },
 
     facilitiesAvailed: {

@@ -30,8 +30,9 @@ exports.getSelectedFreedomFightersService = async (data) => {
     return selectedFreedomFighters;
 }
 
-exports.updateTemporarySelectedMembersService = async (memberIds) => {
-    const result1 = await FreedomFighter.updateMany({ _id: { $in: memberIds } }, { $set: { temporarySelection: '2022' } }, (err, res) => {
+exports.updateTemporarySelectedMembersService = async (data) => {
+    const { memberIds, event, year } = data
+    const result1 = await FreedomFighter.updateMany({ _id: { $in: memberIds } }, { $set: { primarySelection: { event: event, year: year } } }, (err, res) => {
         if (err) {
             console.log(err);
         }
@@ -39,8 +40,8 @@ exports.updateTemporarySelectedMembersService = async (memberIds) => {
         console.log(res);
     });
     const result2 = await FreedomFighter.find({ _id: memberIds });
-    // console.log(result1);
-    console.log(result2);
+    console.log(result1);
+    // console.log(memberIds, event, year);
     return result2;
 }
 

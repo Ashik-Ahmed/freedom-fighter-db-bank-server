@@ -6,10 +6,9 @@ exports.getSelectedFreedomFightersService = async (data) => {
 
     const { memberType, total, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear } = data;
 
-    console.log(total, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear, memberType);
+    // console.log(memberType, total, event, year, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear, memberType);
 
     if (excludePreviousYear == 'false') {
-        console.log(memberType);
         var selectedFreedomFighters = await FreedomFighter.aggregate([
             { $match: { category: memberType } },
             { $project: { "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", "invited_count": { $size: { "$ifNull": ["$invited", []] } } } },

@@ -7,6 +7,7 @@ exports.getAllEventsService = async () => {
 }
 
 exports.addEventService = async (eventData) => {
+    console.log(eventData);
     const result = await Event.create(eventData);
     return result;
 }

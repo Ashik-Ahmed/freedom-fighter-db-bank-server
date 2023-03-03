@@ -164,6 +164,9 @@ const freedomFighterSchema = mongoose.Schema({
         },
         year: {
             type: String,
+        },
+        verificationStatus: {
+            type: String
         }
     },
 

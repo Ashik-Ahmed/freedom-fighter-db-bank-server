@@ -11,6 +11,9 @@ router.route('/primary-selection')
     .get(selectionController.getPrimarySelectedMembers)
     .patch(selectionController.temporarySelected)
 
+router.route('/verification-update')
+    .patch(selectionController.verificationUpdate)
+
 
 
 module.exports = router;

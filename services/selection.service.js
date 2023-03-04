@@ -40,8 +40,17 @@ exports.updateTemporarySelectedMembersService = async (data) => {
 }
 
 exports.getPrimarySelectedMembersService = async (data) => {
+    console.log(data);
     const result = await FreedomFighter.aggregate([
-        { $match: { primarySelection: data } }
+        { $match: { 'primarySelection.event': data.event, 'primarySelection.year': data.year } }
     ])
+    return result;
+}
+
+exports.verificationUpdateService = async (data) => {
+    const { memberId, verificationStatus } = data;
+    console.log(memberId, verificationStatus);
+    const result = await FreedomFighter.updateOne({ _id: memberId }, { $set: { 'primarySelection.verificationStatus': verificationStatus } })
+
     return result;
 }

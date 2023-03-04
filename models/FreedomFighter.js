@@ -166,7 +166,7 @@ const freedomFighterSchema = mongoose.Schema({
             type: String,
         },
         verificationStatus: {
-            type: String
+            type: Object
         }
     },
 

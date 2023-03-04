@@ -159,15 +159,17 @@ const freedomFighterSchema = mongoose.Schema({
     },
 
     primarySelection: {
-        event: {
-            type: String,
-        },
-        year: {
-            type: String,
-        },
-        verificationStatus: {
-            type: Object
-        }
+        type: [{
+            event: {
+                type: String,
+            },
+            year: {
+                type: String,
+            },
+            verificationStatus: {
+                type: Object
+            }
+        }]
     },
 
     facilitiesAvailed: {

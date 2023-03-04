@@ -56,6 +56,7 @@ exports.verificationUpdate = async (req, res) => {
             data: result
         })
     } catch (error) {
+        console.log(error.message)
         res.status(500).json({
             status: 'failed',
             error: error.message

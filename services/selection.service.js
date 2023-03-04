@@ -30,7 +30,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
 
 exports.updateTemporarySelectedMembersService = async (data) => {
     const { memberIds, event, year } = data
-    const result = await FreedomFighter.updateMany({ _id: { $in: memberIds } }, { $set: { primarySelection: { event: event, year: year } } }, (err, res) => {
+    const result = await FreedomFighter.updateMany({ _id: { $in: memberIds } }, { $push: { primarySelection: { event: event, year: year } } }, (err, res) => {
         if (err) {
             console.log(err);
         }
@@ -40,7 +40,7 @@ exports.updateTemporarySelectedMembersService = async (data) => {
 }
 
 exports.getPrimarySelectedMembersService = async (data) => {
-    console.log(data);
+    // console.log(data);
     const result = await FreedomFighter.aggregate([
         { $match: { 'primarySelection.event': data.event, 'primarySelection.year': data.year } }
     ])
@@ -48,9 +48,9 @@ exports.getPrimarySelectedMembersService = async (data) => {
 }
 
 exports.verificationUpdateService = async (data) => {
-    const { memberId, verificationStatus } = data;
-    console.log(memberId, verificationStatus);
-    const result = await FreedomFighter.updateOne({ _id: memberId }, { $set: { 'primarySelection.verificationStatus': verificationStatus } })
+    const { memberId, eventToBeUpdate, verificationStatus } = data;
+    console.log(data);
+    const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: eventToBeUpdate }, { $set: { 'primarySelection.$.verificationStatus': verificationStatus } })
 
     return result;
 }

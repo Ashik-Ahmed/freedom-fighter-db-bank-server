@@ -61,3 +61,11 @@ exports.deletePrimarySelectedMemberService = async (data) => {
     const result = await FreedomFighter.updateOne({ _id: memberId }, { $pull: { primarySelection: { _id: eventToBeUpdate._id } } })
     return result
 }
+
+exports.getFinalSelectedMembersService = async (data) => {
+    const result = await FreedomFighter.aggregate([
+        { $match: { 'primarySelection.event': data.event, 'primarySelection.year': data.year, 'primarySelection.verificationStatus.status': 'Success' } }
+    ])
+    console.log(result);
+    return result;
+}

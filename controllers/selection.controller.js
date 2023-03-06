@@ -78,3 +78,15 @@ exports.deletePrimarySelectedMember = async (req, res) => {
         })
     }
 }
+
+
+exports.getFinalSelectedMembers = async (req, res) => {
+    try {
+        console.log(req.query);
+    } catch (error) {
+        res.status(500).json({
+            status: 'failed',
+            error: error.message
+        })
+    }
+}

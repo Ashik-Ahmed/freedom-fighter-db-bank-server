@@ -17,6 +17,9 @@ router.route('/verification-update')
 router.route('/delete-primary-selected')
     .patch(selectionController.deletePrimarySelectedMember)
 
+router.route('/final-selection')
+    .get(selectionController.getFinalSelectedMembers)
+
 
 
 module.exports = router;

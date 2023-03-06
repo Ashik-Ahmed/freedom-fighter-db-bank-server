@@ -14,6 +14,9 @@ router.route('/primary-selection')
 router.route('/verification-update')
     .patch(selectionController.verificationUpdate)
 
+router.route('/delete-primary-selected')
+    .patch(selectionController.deletePrimarySelectedMember)
+
 
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const FreedomFighter = require("../models/FreedomFighter");
-const { getSelectedFreedomFightersService, updateTemporarySelectedMembersService, getPrimarySelectedMembersService, verificationUpdateService, } = require("../services/selection.service");
+const { getSelectedFreedomFightersService, updateTemporarySelectedMembersService, getPrimarySelectedMembersService, verificationUpdateService, deletePrimarySelectedMemberService, } = require("../services/selection.service");
 
 
 exports.selectFreedomFighters = async (req, res) => {
@@ -56,7 +56,22 @@ exports.verificationUpdate = async (req, res) => {
             data: result
         })
     } catch (error) {
-        console.log(error.message)
+        res.status(500).json({
+            status: 'failed',
+            error: error.message
+        })
+    }
+}
+
+exports.deletePrimarySelectedMember = async (req, res) => {
+    try {
+        const result = await deletePrimarySelectedMemberService(req.body)
+
+        res.status(200).json({
+            status: 'success',
+            data: result
+        })
+    } catch (error) {
         res.status(500).json({
             status: 'failed',
             error: error.message

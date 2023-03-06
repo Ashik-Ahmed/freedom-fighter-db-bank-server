@@ -54,3 +54,10 @@ exports.verificationUpdateService = async (data) => {
 
     return result;
 }
+
+exports.deletePrimarySelectedMemberService = async (data) => {
+    const { eventToBeUpdate, memberId } = data;
+    // console.log(eventToBeUpdate, memberId);
+    const result = await FreedomFighter.updateOne({ _id: memberId }, { $pull: { primarySelection: { _id: eventToBeUpdate._id } } })
+    return result
+}

@@ -1,4 +1,4 @@
-const { getAllEventsService, addEventService } = require("../services/event.service")
+const { getAllEventsService, addEventService, updateEventService } = require("../services/event.service")
 
 
 exports.getAllevents = async (req, res) => {
@@ -6,12 +6,12 @@ exports.getAllevents = async (req, res) => {
         const events = await getAllEventsService();
 
         res.status(200).json({
-            status: 'success',
+            status: 'Success',
             data: events
         })
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error: error.message
         })
     }
@@ -22,12 +22,12 @@ exports.addEvent = async (req, res) => {
         const result = await addEventService(req.body);
 
         res.status(200).json({
-            status: 'success',
+            status: 'Success',
             data: result
         })
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error: error.message
         })
     }
@@ -35,10 +35,14 @@ exports.addEvent = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
     try {
-        console.log(req.body);
+        const result = await updateEventService(req.body)
+        res.status(200).json({
+            status: 'Success',
+            data: result
+        })
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error: error.message
         })
     }

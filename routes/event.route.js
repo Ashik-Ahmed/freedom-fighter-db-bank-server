@@ -9,6 +9,7 @@ const router = express.Router();
 router.route('/')
     .get(eventController.getAllevents)
     .post(verifyToken, authorization('admin'), eventController.addEvent)
+    .patch(verifyToken, eventController.updateEvent)
 
 
 module.exports = router;

@@ -32,3 +32,14 @@ exports.addEvent = async (req, res) => {
         })
     }
 }
+
+exports.updateEvent = async (req, res) => {
+    try {
+        console.log(req.body);
+    } catch (error) {
+        res.status(500).json({
+            status: 'failed',
+            error: error.message
+        })
+    }
+}

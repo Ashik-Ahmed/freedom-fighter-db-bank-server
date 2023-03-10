@@ -66,6 +66,5 @@ exports.getFinalSelectedMembersService = async (data) => {
     const result = await FreedomFighter.aggregate([
         { $match: { 'primarySelection.event': data.event, 'primarySelection.year': data.year, 'primarySelection.verificationStatus.status': 'Success' } }
     ])
-    console.log(result);
     return result;
 }

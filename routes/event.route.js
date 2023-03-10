@@ -10,6 +10,7 @@ router.route('/')
     .get(eventController.getAllevents)
     .post(verifyToken, authorization('admin'), eventController.addEvent)
     .patch(verifyToken, eventController.updateEvent)
+    .delete(verifyToken, authorization('admin'),)
 
 
 module.exports = router;

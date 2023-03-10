@@ -47,3 +47,14 @@ exports.updateEvent = async (req, res) => {
         })
     }
 }
+
+exports.deleteEvent = async (req, res) => {
+    try {
+        console.log(req.params);
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            error: error.message
+        })
+    }
+}

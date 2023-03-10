@@ -1,4 +1,4 @@
-const { getAllEventsService, addEventService, updateEventService } = require("../services/event.service")
+const { getAllEventsService, addEventService, updateEventService, deleteEventService } = require("../services/event.service")
 
 
 exports.getAllevents = async (req, res) => {
@@ -50,7 +50,12 @@ exports.updateEvent = async (req, res) => {
 
 exports.deleteEvent = async (req, res) => {
     try {
-        console.log(req.params);
+        const { id } = req.params
+        const result = await deleteEventService(id)
+        res.status(200).json({
+            status: 'Success',
+            data: result
+        })
     } catch (error) {
         res.status(500).json({
             status: 'Failed',

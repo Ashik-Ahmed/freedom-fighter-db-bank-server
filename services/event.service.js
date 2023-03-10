@@ -19,3 +19,9 @@ exports.updateEventService = async (data) => {
     console.log(result);
     return result;
 }
+
+exports.deleteEventService = async (id) => {
+    const result = await Event.deleteOne({ _id: id })
+    console.log(result);
+    return result;
+}

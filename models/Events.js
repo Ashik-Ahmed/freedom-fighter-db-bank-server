@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema({
     photo: {
         type: String,
     },
-    email: {
+    emailBody: {
         type: String,
     }
 },

@@ -13,8 +13,9 @@ exports.addEventService = async (eventData) => {
 }
 
 exports.updateEventService = async (data) => {
-    const { eventId, email } = data
-    const result = await Event.updateOne({ _id: eventId }, { $set: { email } })
+    const { eventId, updatedData } = data
+    // console.log(updatedData);
+    const result = await Event.updateOne({ _id: eventId }, { $set: updatedData })
     console.log(result);
     return result;
 }

@@ -98,11 +98,12 @@ exports.getFinalSelectedMembers = async (req, res) => {
 
 exports.sendInvitationmail = async (req, res) => {
     try {
+        // console.log(req.body);
         const result = await sendMailWithGmail(req.body)
-        // res.status(200).json({
-        //     status: 'Success',
-        //     data: result
-        // })
+        res.status(200).json({
+            status: 'Success',
+            data: result
+        })
     } catch (error) {
         res.status(500).json({
             status: 'Failed',

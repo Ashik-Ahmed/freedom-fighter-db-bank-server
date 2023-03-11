@@ -1,5 +1,6 @@
 const express = require('express');
 const selectionController = require('../controllers/selection.controller')
+const emailSend = require('../middleware/emailSend')
 
 const router = express.Router();
 
@@ -19,6 +20,9 @@ router.route('/delete-primary-selected')
 
 router.route('/final-selection')
     .get(selectionController.getFinalSelectedMembers)
+
+router.route('/send-invitation-mail')
+    .post(selectionController.sendInvitationmail)
 
 
 

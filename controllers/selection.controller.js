@@ -1,3 +1,4 @@
+const { sendMailWithGmail } = require("../middleware/emailSend");
 const FreedomFighter = require("../models/FreedomFighter");
 const { getSelectedFreedomFightersService, updateTemporarySelectedMembersService, getPrimarySelectedMembersService, verificationUpdateService, deletePrimarySelectedMemberService, getFinalSelectedMembersService, } = require("../services/selection.service");
 
@@ -87,6 +88,21 @@ exports.getFinalSelectedMembers = async (req, res) => {
             status: 'Success',
             data: result
         })
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            error: error.message
+        })
+    }
+}
+
+exports.sendInvitationmail = async (req, res) => {
+    try {
+        const result = await sendMailWithGmail(req.body)
+        // res.status(200).json({
+        //     status: 'Success',
+        //     data: result
+        // })
     } catch (error) {
         res.status(500).json({
             status: 'Failed',

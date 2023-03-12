@@ -47,7 +47,8 @@ exports.insertFreedomFighterService = async (req) => {
 //get all freedom fighters
 exports.getFreedomFightersService = async (req) => {
 
-    const { page, limit = 10, force } = req.query
+    // const { page, limit = 10, force, category } = req.query
+    const { page, limit = 10, category } = req.query
     // console.log(req.query)
 
     // console.log('path hit2');
@@ -96,7 +97,7 @@ exports.getFreedomFightersService = async (req) => {
     if (queryObject) {
         var freedomFighters = await FreedomFighter.aggregate([
             { $match: queryObject },
-            { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+            { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
         ])
 
         var totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
@@ -105,7 +106,7 @@ exports.getFreedomFightersService = async (req) => {
     else {
         var freedomFighters = await FreedomFighter.aggregate([
             { $match: queryObject },
-            { $project: { name: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+            { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
         ])
 
         var totalFreedomFighterCount = await FreedomFighter.find({}).countDocuments();

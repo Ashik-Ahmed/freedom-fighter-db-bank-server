@@ -1,6 +1,6 @@
 const { sendMailWithGmail } = require("../middleware/emailSend");
 const FreedomFighter = require("../models/FreedomFighter");
-const { getSelectedFreedomFightersService, updateTemporarySelectedMembersService, getPrimarySelectedMembersService, verificationUpdateService, deletePrimarySelectedMemberService, getFinalSelectedMembersService, } = require("../services/selection.service");
+const { getSelectedFreedomFightersService, updateTemporarySelectedMembersService, getPrimarySelectedMembersService, verificationUpdateService, deletePrimarySelectedMemberService, getFinalSelectedMembersService, sendInvitationMailService, } = require("../services/selection.service");
 
 
 exports.selectFreedomFighters = async (req, res) => {
@@ -98,12 +98,23 @@ exports.getFinalSelectedMembers = async (req, res) => {
 
 exports.sendInvitationmail = async (req, res) => {
     try {
-        // console.log(req.body);
-        const result = await sendMailWithGmail(req.body)
-        res.status(200).json({
-            status: 'Success',
-            data: result
-        })
+        const { memberId, eventToBeUpdate, mailData } = req.body;
+        // console.log(memberId, eventToBeUpdate, mailData);
+        const emailSend = await sendMailWithGmail(mailData)
+
+        if (emailSend.messageId) {
+            const updateData = {
+                memberId,
+                eventToBeUpdate,
+                invitationMail: 'Sent'
+            }
+            const updateMemberData = await sendInvitationMailService(updateData);
+            console.log(updateMemberData);
+        }
+        // res.status(200).json({
+        //     status: 'Success',
+        //     data: result
+        // })
     } catch (error) {
         res.status(500).json({
             status: 'Failed',

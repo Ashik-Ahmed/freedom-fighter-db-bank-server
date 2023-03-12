@@ -31,12 +31,12 @@ module.exports.sendMailWithGmail = async (data) => {
         text: data.text
     }
 
-    console.log(mailData);
+    // console.log(mailData);
 
     const info = await transporter.sendMail(mailData);
 
-    console.log("Message sent %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // console.log("Message sent %s", info.messageId);
+    // console.log(info);
 
-    return info.messageId;
+    return info;
 }

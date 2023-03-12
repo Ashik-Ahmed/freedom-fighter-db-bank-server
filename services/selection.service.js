@@ -49,7 +49,7 @@ exports.getPrimarySelectedMembersService = async (data) => {
 
 exports.verificationUpdateService = async (data) => {
     const { memberId, eventToBeUpdate, verificationStatus } = data;
-    console.log(data);
+    // console.log(memberId, eventToBeUpdate, verificationStatus);
     const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: eventToBeUpdate }, { $set: { 'primarySelection.$.verificationStatus': verificationStatus } })
 
     return result;
@@ -66,5 +66,14 @@ exports.getFinalSelectedMembersService = async (data) => {
     const result = await FreedomFighter.aggregate([
         { $match: { 'primarySelection.event': data.event, 'primarySelection.year': data.year, 'primarySelection.verificationStatus.status': 'Success' } }
     ])
+    return result;
+}
+
+exports.sendInvitationMailService = async (data) => {
+    const { memberId, eventToBeUpdate, invitationMail } = data;
+    console.log(memberId, eventToBeUpdate, invitationMail);
+    const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: { $elemMatch: { _id: eventToBeUpdate._id } } }, { $set: { "primarySelection.$.invitationMail": invitationMail } });
+
+    console.log(result);
     return result;
 }

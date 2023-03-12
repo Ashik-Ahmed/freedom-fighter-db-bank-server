@@ -168,6 +168,9 @@ const freedomFighterSchema = mongoose.Schema({
             },
             verificationStatus: {
                 type: Object
+            },
+            invitationMail: {
+                type: String
             }
         }]
     },

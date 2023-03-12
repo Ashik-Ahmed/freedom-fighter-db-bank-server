@@ -1,4 +1,5 @@
 const FreedomFighter = require('../models/FreedomFighter');
+const fs = require('fs');
 
 
 // insert a new freedom fighter 
@@ -49,7 +50,7 @@ exports.getFreedomFightersService = async (req) => {
 
     // const { page, limit = 10, force, category } = req.query
     const { page, limit = 10, category } = req.query
-    // console.log(req.query)
+    console.log('all fighters api')
 
     // console.log('path hit2');
     // const { page = 0, limit = 10 } = JSON.parse(req.query.data);
@@ -97,7 +98,7 @@ exports.getFreedomFightersService = async (req) => {
     if (queryObject) {
         var freedomFighters = await FreedomFighter.aggregate([
             { $match: queryObject },
-            { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+            // { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
         ])
 
         var totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
@@ -106,11 +107,32 @@ exports.getFreedomFightersService = async (req) => {
     else {
         var freedomFighters = await FreedomFighter.aggregate([
             { $match: queryObject },
-            { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+            // { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
         ])
 
         var totalFreedomFighterCount = await FreedomFighter.find({}).countDocuments();
     }
+
+    // attaching profilePhoto field to the member data who has photo information in mongodb database 
+    freedomFighters.map((fighter, index) => {
+        if (fighter.photo) {
+            const image = fs.readFileSync(`profilePhotos/${fighter?.photo}`, (err, data) => {
+                if (err) {
+                    res.write('Failed to load file');
+                    res.end();
+                }
+                else {
+                    res.write(data);
+                    // console.log(data);
+                    // fighter[0].profilePhoto = data;
+                    // console.log(fighter[0].photo)
+                    res.end()
+                }
+            })
+            // console.log(image);
+            fighter.profilePhoto = image;
+        }
+    })
     return { totalFreedomFighterCount, freedomFighters };
 }
 

@@ -40,11 +40,11 @@ exports.insertFreedomFighterService = async (data) => {
     // info.officialRank = officeRank
     // const fighterRank = JSON.parse(info.freedomFighterRank);
     // info.freedomFighterRank = fighterRank
-    // console.log(data)
-    const memberInfo = new FreedomFighter(data)
-    var result = await FreedomFighter.create(memberInfo);
-    console.log(result)
-    return result;
+    console.log(data)
+    // const memberInfo = new FreedomFighter(data)
+    // var result = await FreedomFighter.create(memberInfo);
+    // console.log(result)
+    // return result;
 
 }
 

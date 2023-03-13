@@ -22,11 +22,16 @@ exports.insertFreedomFighter = async (req, res) => {
 
     try {
 
-        const formDataWithFile = req.body;
+        const memberInfo = req.body;
+
+        const officeRank = JSON.parse(memberInfo.officialRank);
+        memberInfo.officialRank = officeRank
+        const fighterRank = JSON.parse(memberInfo.freedomFighterRank);
+        memberInfo.freedomFighterRank = fighterRank
         // console.log('printing file Name');
         // console.log(req?.body, req.file.filename)
 
-        const freedomFighter = await insertFreedomFighterService(req)
+        const freedomFighter = await insertFreedomFighterService(memberInfo)
 
         // res.status(200).json({
         //     status: 'success',

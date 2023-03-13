@@ -3,7 +3,7 @@ const fs = require('fs');
 
 
 // insert a new freedom fighter 
-exports.insertFreedomFighterService = async (req) => {
+exports.insertFreedomFighterService = async (data) => {
 
     // console.log("fighterRank:", JSON.parse(req.body?.freedomFighterRank))
     // const freedomFighterInfo = new FreedomFighter({
@@ -35,9 +35,13 @@ exports.insertFreedomFighterService = async (req) => {
 
 
 
-    const info = req.body
-    const memberInfo = new FreedomFighter(info)
-    console.log(info)
+    // const info = req.body
+    // const officeRank = JSON.parse(info.officialRank);
+    // info.officialRank = officeRank
+    // const fighterRank = JSON.parse(info.freedomFighterRank);
+    // info.freedomFighterRank = fighterRank
+    // console.log(data)
+    const memberInfo = new FreedomFighter(data)
     var result = await FreedomFighter.create(memberInfo);
     console.log(result)
     return result;

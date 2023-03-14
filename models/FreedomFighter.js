@@ -55,6 +55,11 @@ const freedomFighterSchema = mongoose.Schema({
         enum: ["Alive", "Dead"]
     },
 
+    careerStatus: {
+        type: String,
+        required: [true, 'career status is required']
+    },
+
     force: {
         type: String,
         required: [true, "Force is required"],

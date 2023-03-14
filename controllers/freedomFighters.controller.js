@@ -24,10 +24,14 @@ exports.insertFreedomFighter = async (req, res) => {
 
         const memberInfo = req.body;
 
-        const officeRank = JSON.parse(memberInfo.officialRank);
-        memberInfo.officialRank = officeRank
-        const fighterRank = JSON.parse(memberInfo.freedomFighterRank);
-        memberInfo.freedomFighterRank = fighterRank
+        if (memberInfo?.officialRank) {
+            const officeRank = JSON.parse(memberInfo?.officialRank);
+            memberInfo.officialRank = officeRank
+        }
+        if (memberInfo?.freedomFighterRank) {
+            const fighterRank = JSON.parse(memberInfo?.freedomFighterRank);
+            memberInfo.freedomFighterRank = fighterRank
+        }
         // console.log('printing file Name');
         // console.log(req?.body, req.file.filename)
 

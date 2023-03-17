@@ -19,7 +19,7 @@ exports.profilePhotoUpload = async (req, res) => {
 
 // insert a new freedom fighter
 exports.insertFreedomFighter = async (req, res) => {
-    console.log('baclend api called for insertion');
+    console.log('backend api called for insertion');
 
     try {
 
@@ -39,7 +39,7 @@ exports.insertFreedomFighter = async (req, res) => {
         const freedomFighter = await insertFreedomFighterService(memberInfo)
 
         res.status(200).json({
-            status: 'success',
+            status: 'Success',
             data: freedomFighter,
         })
     } catch (error) {
@@ -72,7 +72,7 @@ exports.getFreedomFighters = async (req, res) => {
         // })
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error: error.message,
         })
     }
@@ -111,7 +111,7 @@ exports.getSingleFreedomFighter = async (req, res) => {
         // })
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error: error.message,
         })
     }
@@ -121,23 +121,38 @@ exports.getSingleFreedomFighter = async (req, res) => {
 
 // update a freedom fighter 
 exports.updateFreedomFighterById = async (req, res) => {
+    console.log('update api hit');
     try {
-        const { memberId } = req.params;
-        const result = await updateFreedomFighterByIdService(memberId, req.body);
+        const { id } = req.params;
+        const updatedMemberData = req.body;
+
+        if (updatedMemberData?.officialRank) {
+            const officeRank = JSON.parse(updatedMemberData?.officialRank);
+            updatedMemberData.officialRank = officeRank
+        }
+        if (updatedMemberData?.freedomFighterRank) {
+            const fighterRank = JSON.parse(updatedMemberData?.freedomFighterRank);
+            updatedMemberData.freedomFighterRank = fighterRank
+        }
+
+        const result = await updateFreedomFighterByIdService(id, req.body);
+        // console.log(result);
 
         if (!result.modifiedCount) {
             return res.status(200).json({
-                status: 'failed',
+                status: 'Failed',
                 message: "Couldn't update. Please try again"
             })
         }
-        res.status(200).json({
-            status: 'success',
-            message: 'Successfully updated',
-        })
+        else {
+            return res.status(200).json({
+                status: 'Success',
+                message: 'Successfully updated',
+            })
+        }
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error: error.message
         })
     }
@@ -152,19 +167,19 @@ exports.deleteFreedomFighterById = async (req, res) => {
 
         if (!result.deletedCount) {
             return res.status(400).json({
-                status: 'failed',
+                status: 'Failed',
                 error: "Couldn't delete the product"
             })
         }
 
         res.status(200).json({
-            status: 'success',
+            status: 'Success',
             message: 'Successfully deleted',
             data: result
         })
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error
         })
     }

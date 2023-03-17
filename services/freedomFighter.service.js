@@ -143,9 +143,9 @@ exports.getFreedomFightersService = async (req) => {
 
 // update a freedom fighter 
 exports.updateFreedomFighterByIdService = async (memberId, data) => {
-    console.log(memberId, data);
-    // const result = await FreedomFighter.updateOne({ _id: freedomFighterId }, { $set: data });
-    // return result;
+    // console.log(memberId, data);
+    const result = await FreedomFighter.updateOne({ _id: memberId }, { $set: data });
+    return result;
 }
 
 

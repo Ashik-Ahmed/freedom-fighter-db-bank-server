@@ -19,6 +19,7 @@ exports.profilePhotoUpload = async (req, res) => {
 
 // insert a new freedom fighter
 exports.insertFreedomFighter = async (req, res) => {
+    console.log('baclend api called for insertion');
 
     try {
 
@@ -37,11 +38,10 @@ exports.insertFreedomFighter = async (req, res) => {
 
         const freedomFighter = await insertFreedomFighterService(memberInfo)
 
-        // res.status(200).json({
-        //     status: 'success',
-        //     message: 'Successfully inserted freedom fighter',
-        //     data: freedomFighter,
-        // })
+        res.status(200).json({
+            status: 'success',
+            data: freedomFighter,
+        })
     } catch (error) {
         console.log(error.message)
 
@@ -122,8 +122,8 @@ exports.getSingleFreedomFighter = async (req, res) => {
 // update a freedom fighter 
 exports.updateFreedomFighterById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const result = await updateFreedomFighterByIdService(id, req.body);
+        const { memberId } = req.params;
+        const result = await updateFreedomFighterByIdService(memberId, req.body);
 
         if (!result.modifiedCount) {
             return res.status(200).json({

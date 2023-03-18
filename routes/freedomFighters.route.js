@@ -1,6 +1,6 @@
 const express = require('express');
 const freedomFighterController = require('../controllers/freedomFighters.controller');
-const issueController = require('../controllers/issue.controller')
+const complaintController = require('../controllers/complaint.controller')
 const uploader = require('../middleware/uploader');
 
 const router = express.Router();
@@ -36,7 +36,7 @@ router.route('/:id')
     .delete(freedomFighterController.deleteFreedomFighterById)
 
 
-router.route('/:id/issue')
-    .post(issueController.addNewIssue)
+router.route('/:id/comlaint')
+    .post(complaintController.addNewComplaint)
 
 module.exports = router;

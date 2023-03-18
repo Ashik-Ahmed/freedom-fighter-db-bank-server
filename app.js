@@ -15,7 +15,6 @@ const freedomFighterRoute = require('./routes/freedomFighters.route')
 const successorRoute = require('./routes/successor.route')
 const selectionRoute = require('./routes/selection.route')
 const eventRoute = require('./routes/event.route')
-const issueRoute = require('./routes/issue.route')
 
 
 app.get('/', (req, res) => {

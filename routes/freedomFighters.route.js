@@ -1,5 +1,6 @@
 const express = require('express');
 const freedomFighterController = require('../controllers/freedomFighters.controller');
+const issueController = require('../controllers/issue.controller')
 const uploader = require('../middleware/uploader');
 
 const router = express.Router();
@@ -23,6 +24,7 @@ const router = express.Router();
 router.route('/profilePhotoUpload')
     .post(uploader.single('photo'), freedomFighterController.profilePhotoUpload)
 
+
 router.route('/')
     // .post(uploader.single('photo'), freedomFighterController.insertFreedomFighter)
     .post(uploader.single('file'), freedomFighterController.insertFreedomFighter)
@@ -33,5 +35,8 @@ router.route('/:id')
     .patch(freedomFighterController.updateFreedomFighterById)
     .delete(freedomFighterController.deleteFreedomFighterById)
 
+
+router.route('/:id/issue')
+    .post(issueController.addNewIssue)
 
 module.exports = router;

@@ -197,11 +197,18 @@ const freedomFighterSchema = mongoose.Schema({
                 type: String,
                 enum: ["New", "Processing", "Resolved"],
             },
-            feedback: {
+            details: {
                 type: String,
-                minLength: [5, "Feedback too short"]
-            }
-        }]
+            },
+            feedback: {
+                type: Array
+            },
+
+        },
+        {
+            timestamps: true
+        }
+        ]
     },
 
     successor: [{

@@ -21,7 +21,7 @@ exports.findUserByEmail = async (email) => {
 exports.updateProfileService = async (id, updatedData) => {
     console.log(id, updatedData);
     const result = await User.updateOne({ _id: id }, { $set: updatedData })
-    console.log(result);
+    // console.log(result);
     return result;
 }
 

@@ -188,18 +188,20 @@ const freedomFighterSchema = mongoose.Schema({
     },
 
     complaints: {
-        issue: {
-            type: String,
-            minLength: [10, "Issue details too short"]
-        },
-        status: {
-            type: String,
-            enum: ["New", "Pending", "Resolved"],
-        },
-        feedback: {
-            type: String,
-            minLength: [5, "Feedback too short"]
-        }
+        type: [{
+            issue: {
+                type: String,
+                minLength: [10, "Issue details too short"]
+            },
+            status: {
+                type: String,
+                enum: ["New", "Processing", "Resolved"],
+            },
+            feedback: {
+                type: String,
+                minLength: [5, "Feedback too short"]
+            }
+        }]
     },
 
     successor: [{

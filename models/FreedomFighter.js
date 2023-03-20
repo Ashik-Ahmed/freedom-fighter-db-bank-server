@@ -200,7 +200,7 @@ const freedomFighterSchema = mongoose.Schema({
             details: {
                 type: String,
             },
-            feedback: {
+            feedbacks: {
                 type: [
                     {
                         feedback: {

@@ -102,7 +102,7 @@ exports.getSingleFreedomFighter = async (req, res) => {
             // console.log(image);
             fighter[0].profilePhoto = image;
         }
-        console.log(fighter);
+        // console.log(fighter);
         res.status(200).json(fighter)
 
         // res.status(200).json({

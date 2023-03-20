@@ -37,6 +37,8 @@ router.route('/:id')
 
 
 router.route('/:id/comlaint')
+    .get(complaintController.getAllComplaints)
     .post(complaintController.addNewComplaint)
+    .patch(complaintController.updateComplaint)
 
 module.exports = router;

@@ -195,7 +195,7 @@ const freedomFighterSchema = mongoose.Schema({
             },
             status: {
                 type: String,
-                enum: ["New", "Processing", "Resolved"],
+                enum: ["Processing", "Resolved"],
             },
             details: {
                 type: String,

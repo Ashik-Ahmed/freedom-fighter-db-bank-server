@@ -201,7 +201,16 @@ const freedomFighterSchema = mongoose.Schema({
                 type: String,
             },
             feedback: {
-                type: Array
+                type: [
+                    {
+                        feedback: {
+                            type: String
+                        },
+                        dateTime: {
+                            type: String
+                        }
+                    }
+                ]
             },
 
         },

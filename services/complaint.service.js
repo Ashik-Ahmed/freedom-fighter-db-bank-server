@@ -17,5 +17,9 @@ exports.getAllComplaintsService = async (memberId) => {
 }
 
 exports.updateComplaintService = async (data) => {
-    console.log(data);
+    const { memberId, complaintId, feedback } = data;
+    console.log(memberId, complaintId, feedback);
+
+    const result = await FreedomFighter.updateOne({ _id: id }, { $elemMatch: { _id: complaintId } }, { $push: { feedback: { feedback } } });
+    return result;
 }

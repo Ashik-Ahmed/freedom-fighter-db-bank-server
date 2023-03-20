@@ -48,8 +48,9 @@ exports.getAllComplaints = async (req, res) => {
 exports.updateComplaint = async (req, res) => {
     try {
         const { id } = req.params
-        // console.log(id, req.body);
-        const result = await updateComplaintService({ id, feedback: req.body })
+        const { complaintId, feedback } = req.body
+        console.log(id, complaintId, feedback);
+        const result = await updateComplaintService({ memberId: id, complaintId, feedback })
 
         res.status(200).json({
             status: 'Success',

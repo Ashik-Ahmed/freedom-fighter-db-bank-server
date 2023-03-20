@@ -21,12 +21,12 @@ exports.getAllComplaintsService = async (memberId) => {
 
 exports.updateComplaintService = async (data) => {
     const { complaintId, feedback } = data;
-
+    // console.log(complaintId, feedback);
     const result = await FreedomFighter.updateOne(
         // { _id: memberId, complaints: { $elemMatch: { _id: complaintId } } },
         { 'complaints._id': complaintId },
-        { $push: { 'complaints.$.feedback': feedback } }
+        { $push: { 'complaints.$.feedbacks': feedback } }
     );
-    console.log(result);
+    // console.log(result);
     return result;
 }

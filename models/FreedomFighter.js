@@ -213,6 +213,9 @@ const freedomFighterSchema = mongoose.Schema({
                 ]
             },
 
+        },
+        {
+            timestamps: true,
         }
         ]
     },

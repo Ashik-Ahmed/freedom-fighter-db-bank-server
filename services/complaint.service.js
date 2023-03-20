@@ -3,7 +3,10 @@ const FreedomFighter = require("../models/FreedomFighter");
 
 exports.addNewComplaintService = async ({ id, issueData }) => {
     // console.log(id, issueData);
-    const result = await FreedomFighter.updateOne({ _id: id }, { $push: { complaints: issueData } })
+    const result = await FreedomFighter.updateOne(
+        { _id: id },
+        { $push: { complaints: issueData } }
+    )
     return result;
 }
 
@@ -20,6 +23,11 @@ exports.updateComplaintService = async (data) => {
     const { memberId, complaintId, feedback } = data;
     console.log(memberId, complaintId, feedback);
 
-    const result = await FreedomFighter.updateOne({ _id: id }, { $elemMatch: { _id: complaintId } }, { $push: { feedback: { feedback } } });
+    const result = await FreedomFighter.updateOne(
+        // { _id: memberId, complaints: { $elemMatch: { _id: complaintId } } },
+        { 'complaints._id': complaintId },
+        { $push: { 'complaints.$.feedback': feedback } }
+    );
+    console.log(result);
     return result;
 }

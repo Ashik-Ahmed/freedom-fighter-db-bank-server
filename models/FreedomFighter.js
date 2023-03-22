@@ -212,6 +212,9 @@ const freedomFighterSchema = mongoose.Schema({
                     }
                 ]
             },
+            created: {
+                type: String,
+            }
 
         },
         {

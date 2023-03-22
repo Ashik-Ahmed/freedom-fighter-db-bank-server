@@ -1,4 +1,4 @@
-const { addNewIssueService, addNewComplaintService, getAllComplaintsService, updateComplaintService } = require("../services/complaint.service");
+const { addNewComplaintService, getAllComplaintsService, updateComplaintFeedbackService, updateComplaintStatusService } = require("../services/complaint.service");
 
 exports.addNewComplaint = async (req, res) => {
     try {
@@ -47,9 +47,15 @@ exports.getAllComplaints = async (req, res) => {
 
 exports.updateComplaint = async (req, res) => {
     try {
-        const { complaintId, feedback } = req.body
+        const { complaintId, feedback, status } = req.body
         // console.log(id, complaintId, feedback);
-        const result = await updateComplaintService({ complaintId, feedback })
+        if (feedback) {
+            var result = await updateComplaintFeedbackService({ complaintId, feedback })
+        }
+
+        if (status) {
+            var result = await updateComplaintStatusService(complaintId, status);
+        }
 
         res.status(200).json({
             status: 'Success',

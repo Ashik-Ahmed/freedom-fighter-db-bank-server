@@ -19,14 +19,19 @@ exports.getAllComplaintsService = async (memberId) => {
     return result[0].complaints;
 }
 
-exports.updateComplaintService = async (data) => {
+exports.updateComplaintFeedbackService = async (data) => {
     const { complaintId, feedback } = data;
-    // console.log(complaintId, feedback);
-    const result = await FreedomFighter.updateOne(
-        // { _id: memberId, complaints: { $elemMatch: { _id: complaintId } } },
-        { 'complaints._id': complaintId },
-        { $push: { 'complaints.$.feedbacks': feedback } }
-    );
+    console.log(complaintId, feedback);
+    // const result = await FreedomFighter.updateOne(
+    //     // { _id: memberId, complaints: { $elemMatch: { _id: complaintId } } },
+    //     { 'complaints._id': complaintId },
+    //     { $push: { 'complaints.$.feedbacks': feedback } }
+    // );
     // console.log(result);
     return result;
+}
+
+exports.updateComplaintStatusService = async (data) => {
+    const { complaintId, status } = data;
+    console.log(complaintId, status);
 }

@@ -21,17 +21,25 @@ exports.getAllComplaintsService = async (memberId) => {
 
 exports.updateComplaintFeedbackService = async (data) => {
     const { complaintId, feedback } = data;
-    console.log(complaintId, feedback);
-    // const result = await FreedomFighter.updateOne(
-    //     // { _id: memberId, complaints: { $elemMatch: { _id: complaintId } } },
-    //     { 'complaints._id': complaintId },
-    //     { $push: { 'complaints.$.feedbacks': feedback } }
-    // );
+    console.log("feedback service", complaintId, feedback);
+    const result = await FreedomFighter.updateOne(
+        // { _id: memberId, complaints: { $elemMatch: { _id: complaintId } } },
+        { 'complaints._id': complaintId },
+        { $push: { 'complaints.$.feedbacks': feedback } }
+    );
     // console.log(result);
     return result;
 }
 
 exports.updateComplaintStatusService = async (data) => {
     const { complaintId, status } = data;
-    console.log(complaintId, status);
+    console.log("status service", complaintId, status);
+
+    const result = await FreedomFighter.updateOne(
+        { 'complaints._id': complaintId },
+        { $set: { 'complaints.$.status': status } }
+    )
+
+    console.log(result);
+    return result;
 }

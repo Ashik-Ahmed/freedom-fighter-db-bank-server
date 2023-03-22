@@ -54,7 +54,7 @@ exports.updateComplaint = async (req, res) => {
         }
 
         if (status) {
-            var result = await updateComplaintStatusService(complaintId, status);
+            var result = await updateComplaintStatusService({ complaintId, status });
         }
 
         res.status(200).json({

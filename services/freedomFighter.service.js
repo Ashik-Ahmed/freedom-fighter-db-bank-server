@@ -102,7 +102,19 @@ exports.getFreedomFightersService = async (req) => {
     if (queryObject) {
         var freedomFighters = await FreedomFighter.aggregate([
             { $match: queryObject },
-            // { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+            {
+                $project: {
+                    name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, mobile: 1, address: 1, status: 1, invited: 1, invitationCount: {
+                        $size: {
+                            $filter: {
+                                input: { $ifNull: ["$primarySelection", []] },
+                                as: "elem",
+                                cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
+                            }
+                        }
+                    }
+                }
+            }
         ])
 
         var totalFreedomFighterCount = await FreedomFighter.find(queryObject).countDocuments();
@@ -111,7 +123,19 @@ exports.getFreedomFightersService = async (req) => {
     else {
         var freedomFighters = await FreedomFighter.aggregate([
             { $match: queryObject },
-            // { $project: { name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, status: 1, invited: 1 } }
+            {
+                $project: {
+                    name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, mobile: 1, address: 1, status: 1, invited: 1, invitationCount: {
+                        $size: {
+                            $filter: {
+                                input: { $ifNull: ["$primarySelection", []] },
+                                as: "elem",
+                                cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
+                            }
+                        }
+                    }
+                }
+            }
         ])
 
         var totalFreedomFighterCount = await FreedomFighter.find({}).countDocuments();

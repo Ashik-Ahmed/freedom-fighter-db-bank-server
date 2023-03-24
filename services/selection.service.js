@@ -5,50 +5,65 @@ const FreedomFighter = require("../models/FreedomFighter");
 exports.getSelectedFreedomFightersService = async (data) => {
 
     const { memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear } = data;
-    console.log(memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);
+    // console.log(memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);
+    const sortCriteria = JSON.parse(selectionCriteria)
+
+    const sortOrder = [];
+
+    for (const key in sortCriteria) {
+        if (sortCriteria.hasOwnProperty(key)) {
+            sortOrder.push({
+                field: sortCriteria[key],
+                direction: 1
+            })
+        }
+    }
+    console.log(sortOrder);
+
+
 
     var selectedFreedomFighters = []
-    if (excludePreviousYear == 'false') {
-        selectedFreedomFighters = await FreedomFighter.aggregate([
-            { $match: { category: memberType } },
-            {
-                $project: {
-                    "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
-                        $size: {
-                            $filter: {
-                                input: { $ifNull: ["$primarySelection", []] },
-                                as: "elem",
-                                cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
-                            }
-                        }
-                    }
-                }
-            },
-            { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
-            { $limit: parseInt(total) }
-        ])
-    }
+    // if (excludePreviousYear == 'false') {
+    //     selectedFreedomFighters = await FreedomFighter.aggregate([
+    //         { $match: { category: memberType } },
+    //         {
+    //             $project: {
+    //                 "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+    //                     $size: {
+    //                         $filter: {
+    //                             input: { $ifNull: ["$primarySelection", []] },
+    //                             as: "elem",
+    //                             cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
+    //         { $limit: parseInt(total) }
+    //     ])
+    // }
 
-    else {
-        selectedFreedomFighters = await FreedomFighter.aggregate([
-            { $match: { invited: { $ne: '2021' }, category: memberType } },
-            {
-                $project: {
-                    "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
-                        $size: {
-                            $filter: {
-                                input: { $ifNull: ["$primarySelection", []] },
-                                as: "elem",
-                                cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
-                            }
-                        }
-                    }
-                }
-            },
-            { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
-            { $limit: parseInt(total) }
-        ])
-    }
+    // else {
+    //     selectedFreedomFighters = await FreedomFighter.aggregate([
+    //         { $match: { invited: { $ne: '2021' }, category: memberType } },
+    //         {
+    //             $project: {
+    //                 "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+    //                     $size: {
+    //                         $filter: {
+    //                             input: { $ifNull: ["$primarySelection", []] },
+    //                             as: "elem",
+    //                             cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
+    //         { $limit: parseInt(total) }
+    //     ])
+    // }
     return selectedFreedomFighters;
 }
 

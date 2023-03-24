@@ -4,7 +4,7 @@ const { ObjectId } = mongoose.Schema.Types;
 
 
 const freedomFighterSchema = mongoose.Schema({
-    fullName: {
+    name: {
         type: String,
         required: [true, 'Name is required'],
         trim: true,

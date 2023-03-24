@@ -67,6 +67,8 @@ exports.getSelectedFreedomFightersService = async (data) => {
                 }
             },
             // { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
+
+            // reduce() function creates an object that maps each sort field to its corresponding sort direction. We then pass this object to the $sort stage, which will apply the sorting based on the keys in the object.
             {
                 $sort: sortOrder.reduce((acc, sort) => {
                     acc[sort.field] = sort.direction == 1 ? 1 : -1;
@@ -76,7 +78,6 @@ exports.getSelectedFreedomFightersService = async (data) => {
             { $limit: parseInt(total) }
         ])
     }
-    console.log('result: ', selectedFreedomFighters);
     return selectedFreedomFighters;
 }
 

@@ -40,11 +40,11 @@ exports.insertFreedomFighterService = async (data) => {
     // info.officialRank = officeRank
     // const fighterRank = JSON.parse(info.freedomFighterRank);
     // info.freedomFighterRank = fighterRank
-    console.log(data)
-    // const memberInfo = new FreedomFighter(data)
-    // var result = await FreedomFighter.create(memberInfo);
+    // console.log(data)
+    const memberInfo = new FreedomFighter(data)
+    var result = await FreedomFighter.create(memberInfo);
     // console.log(result)
-    // return result;
+    return result;
 
 }
 
@@ -54,7 +54,6 @@ exports.getFreedomFightersService = async (req) => {
 
     // const { page, limit = 10, force, category } = req.query
     const { page, limit = 10, category } = req.query
-    console.log('all fighters api')
 
     // console.log('path hit2');
     // const { page = 0, limit = 10 } = JSON.parse(req.query.data);

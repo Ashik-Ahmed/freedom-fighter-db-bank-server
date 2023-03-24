@@ -24,6 +24,7 @@ exports.insertFreedomFighter = async (req, res) => {
     try {
 
         const memberInfo = req.body;
+        memberInfo.photo = req.file.filename
 
         if (memberInfo?.officialRank) {
             const officeRank = JSON.parse(memberInfo?.officialRank);
@@ -34,25 +35,34 @@ exports.insertFreedomFighter = async (req, res) => {
             memberInfo.freedomFighterRank = fighterRank
         }
         // console.log('printing file Name');
-        // console.log(req?.body, req.file.filename)
+        // console.log(memberInfo)
 
         const freedomFighter = await insertFreedomFighterService(memberInfo)
+        // console.log(freedomFighter);
 
-        res.status(200).json({
-            status: 'Success',
-            data: freedomFighter,
-        })
+        if (freedomFighter._id) {
+            res.status(200).json({
+                status: 'Success',
+                data: freedomFighter,
+            })
+        }
+        else {
+            res.status(400).json({
+                status: 'Failed',
+                error: 'Operation Failed! Please try again',
+            })
+        }
     } catch (error) {
         console.log(error.message)
 
-        res.writeHead(500, { 'content-type': 'text/html' });
-        res.write(error.message);
-        res.end();
+        // res.writeHead(500, { 'content-type': 'text/html' });
+        // res.write(error.message);
+        // res.end();
 
-        // res.status(500).json({
-        //     status: 'failed',
-        //     error: error.message
-        // })
+        res.status(500).json({
+            status: 'Failed',
+            error: error.message || 'Operation Failed! Please try again'
+        })
     }
     // console.log(req.body)
     // res.send('success')

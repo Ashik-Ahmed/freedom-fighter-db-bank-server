@@ -125,7 +125,7 @@ exports.getFinalSelectedMembersService = async (data) => {
 exports.sendInvitationMailService = async (data) => {
     const { memberId, eventToBeUpdate, invitationMail } = data;
     console.log(memberId, eventToBeUpdate, invitationMail);
-    const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: { $elemMatch: { _id: eventToBeUpdate._id } } }, { $set: { "primarySelection.$.invitationMail": invitationMail } });
+    const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: { $elemMatch: { event: eventToBeUpdate.name, year: eventToBeUpdate.year } } }, { $set: { "primarySelection.$.invitationMail": invitationMail } });
 
     console.log(result);
     return result;

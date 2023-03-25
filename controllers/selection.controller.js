@@ -102,7 +102,7 @@ exports.sendInvitationmail = async (req, res) => {
         const { memberId, eventToBeUpdate, mailData } = req.body;
         // console.log(memberId, eventToBeUpdate, mailData);
         const emailSend = await sendMailWithGmail(mailData)
-        console.log('emailsend Data', emailSend);
+        // console.log('emailsend Data', emailSend);
 
         if (emailSend.messageId) {
             const updateData = {
@@ -111,7 +111,6 @@ exports.sendInvitationmail = async (req, res) => {
                 invitationMail: 'Sent'
             }
             const updateMemberData = await sendInvitationMailService(updateData);
-            console.log(updateMemberData);
         }
         // res.status(200).json({
         //     status: 'Success',

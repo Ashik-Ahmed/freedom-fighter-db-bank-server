@@ -102,6 +102,7 @@ exports.sendInvitationmail = async (req, res) => {
         const { memberId, eventToBeUpdate, mailData } = req.body;
         // console.log(memberId, eventToBeUpdate, mailData);
         const emailSend = await sendMailWithGmail(mailData)
+        console.log('emailsend Data', emailSend);
 
         if (emailSend.messageId) {
             const updateData = {

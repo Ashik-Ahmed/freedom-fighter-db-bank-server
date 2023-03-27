@@ -126,7 +126,17 @@ exports.deletePrimarySelectedMemberService = async (data) => {
 
 exports.getFinalSelectedMembersService = async (data) => {
     const result = await FreedomFighter.aggregate([
-        { $match: { 'primarySelection.event': data.event, 'primarySelection.year': data.year, 'primarySelection.verificationStatus.status': 'Success' } }
+        {
+            $match: {
+                primarySelection: {
+                    $elemMatch: {
+                        event: data.event,
+                        year: data.year,
+                        'verificationStatus.status': 'Success'
+                    }
+                }
+            }
+        }
     ])
     return result;
 }

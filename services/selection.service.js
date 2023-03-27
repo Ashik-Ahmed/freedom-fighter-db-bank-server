@@ -4,26 +4,30 @@ const FreedomFighter = require("../models/FreedomFighter");
 //get selected freedom fighters
 exports.getSelectedFreedomFightersService = async (data) => {
 
-    const { memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear } = data;
+    const { total, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(data.data);
+
+    // const { memberType, total, selectionCriteria, excludePreviousYear, yearOfInvitation } = data;
     // console.log(memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);
-    const sortCriteria = JSON.parse(selectionCriteria)
+    console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
+    // const sortCriteria = JSON.parse(selectionCriteria)
 
     const sortOrder = [];
 
-    for (const key in sortCriteria) {
-        if (sortCriteria.hasOwnProperty(key)) {
+    for (const key in selectionCriteria) {
+        if (selectionCriteria.hasOwnProperty(key)) {
             sortOrder.push({
-                field: sortCriteria[key],
+                field: selectionCriteria[key],
                 direction: 1
             })
         }
     }
     // console.log(sortOrder);
-
+    console.log((eventDetails.year - 1).toString());
 
 
     var selectedFreedomFighters = []
-    if (excludePreviousYear == 'false') {
+    if (!excludePreviousYear) {
+        console.log('no exclusion');
         selectedFreedomFighters = await FreedomFighter.aggregate([
             { $match: { category: memberType } },
             {
@@ -51,8 +55,35 @@ exports.getSelectedFreedomFightersService = async (data) => {
     }
 
     else {
+        console.log('excluding previous invited');
         selectedFreedomFighters = await FreedomFighter.aggregate([
-            { $match: { invited: { $ne: '2021' }, category: memberType } },
+            {
+                $match: {
+                    category: memberType,
+                    $expr: {
+                        $gt: [
+                            { $size: "$primarySelection" }, 0
+                        ]
+                    },
+                    primarySelection: {
+                        $not: {
+                            $elemMatch: {
+                                $and: [
+                                    {
+                                        event: eventDetails.event
+                                    },
+                                    {
+                                        year: (eventDetails.year - 1).toString()
+                                    },
+                                    {
+                                        verificationStatus: { status: 'Success' }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
             {
                 $project: {
                     "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
@@ -93,7 +124,7 @@ exports.updateTemporarySelectedMembersService = async (data) => {
 }
 
 exports.getPrimarySelectedMembersService = async (data) => {
-    console.log(data);
+    // console.log(data);
     const result = await FreedomFighter.aggregate([
         {
             $match: {
@@ -111,7 +142,7 @@ exports.getPrimarySelectedMembersService = async (data) => {
 
 exports.verificationUpdateService = async (data) => {
     const { memberId, eventToBeUpdate, verificationStatus } = data;
-    console.log(memberId, eventToBeUpdate, verificationStatus);
+    // console.log(memberId, eventToBeUpdate, verificationStatus);
     const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: eventToBeUpdate }, { $set: { 'primarySelection.$.verificationStatus': verificationStatus } })
 
     return result;

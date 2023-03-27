@@ -52,7 +52,6 @@ exports.getPrimarySelectedMembers = async (req, res) => {
 
 exports.verificationUpdate = async (req, res) => {
     try {
-        console.log(req.body);
         const result = await verificationUpdateService(req.body)
         res.status(200).json({
             status: 'Success',

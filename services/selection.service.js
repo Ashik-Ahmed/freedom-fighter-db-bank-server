@@ -8,7 +8,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
 
     // const { memberType, total, selectionCriteria, excludePreviousYear, yearOfInvitation } = data;
     // console.log(memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);
-    console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
+    // console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
     // const sortCriteria = JSON.parse(selectionCriteria)
 
     const sortOrder = [];
@@ -22,12 +22,10 @@ exports.getSelectedFreedomFightersService = async (data) => {
         }
     }
     // console.log(sortOrder);
-    console.log((eventDetails.year - 1).toString());
 
 
     var selectedFreedomFighters = []
     if (!excludePreviousYear) {
-        console.log('no exclusion');
         selectedFreedomFighters = await FreedomFighter.aggregate([
             { $match: { category: memberType } },
             {
@@ -43,7 +41,6 @@ exports.getSelectedFreedomFightersService = async (data) => {
                     }
                 }
             },
-            // { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
             {
                 $sort: sortOrder.reduce((acc, sort) => {
                     acc[sort.field] = sort.direction == 1 ? 1 : -1;
@@ -55,14 +52,13 @@ exports.getSelectedFreedomFightersService = async (data) => {
     }
 
     else {
-        console.log('excluding previous invited');
         selectedFreedomFighters = await FreedomFighter.aggregate([
             {
                 $match: {
                     category: memberType,
                     $expr: {
                         $gt: [
-                            { $size: "$primarySelection" }, 0
+                            { $size: "$primarySelection" }, 0   //checking if primarySelection field is empty or not
                         ]
                     },
                     primarySelection: {
@@ -73,7 +69,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
                                         event: eventDetails.event
                                     },
                                     {
-                                        year: (eventDetails.year - 1).toString()
+                                        year: (eventDetails.year - 1).toString()    //converting to String as year field declared as String in the model
                                     },
                                     {
                                         verificationStatus: { status: 'Success' }
@@ -97,7 +93,6 @@ exports.getSelectedFreedomFightersService = async (data) => {
                     }
                 }
             },
-            // { $sort: { [firstCriteria]: 1, [secondCriteria]: 1, [thirdCriteria]: 1 } },
 
             // reduce() function creates an object that maps each sort field to its corresponding sort direction. We then pass this object to the $sort stage, which will apply the sorting based on the keys in the object.
             {
@@ -173,6 +168,7 @@ exports.getFinalSelectedMembersService = async (data) => {
 }
 
 exports.sendInvitationMailService = async (data) => {
+    console.log('send mail service');
     const { memberId, eventToBeUpdate, invitationMail } = data;
     // console.log(memberId, eventToBeUpdate, invitationMail);
     const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: { $elemMatch: { event: eventToBeUpdate.name, year: eventToBeUpdate.year } } }, { $set: { "primarySelection.$.invitationMail": invitationMail } });

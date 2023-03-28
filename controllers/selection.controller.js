@@ -1,7 +1,7 @@
 const { sendMailWithGmail } = require("../middleware/emailSend");
 const FreedomFighter = require("../models/FreedomFighter");
 const { getSelectedFreedomFightersService, updateTemporarySelectedMembersService, getPrimarySelectedMembersService, verificationUpdateService, deletePrimarySelectedMemberService, getFinalSelectedMembersService, sendInvitationMailService, } = require("../services/selection.service");
-
+const QRCode = require('qrcode')
 
 exports.selectFreedomFighters = async (req, res) => {
     try {
@@ -99,10 +99,24 @@ exports.getFinalSelectedMembers = async (req, res) => {
 
 exports.sendInvitationmail = async (req, res) => {
     try {
-        const { memberId, eventToBeUpdate, mailData } = req.body;
+        const { memberId, memberName, eventToBeUpdate, mailData } = req.body;
         // console.log(memberId, eventToBeUpdate, mailData);
+        const qrCodeData = {
+            memberName,
+            event: eventToBeUpdate.name,
+            year: eventToBeUpdate.year,
+        }
+
+        // Converting the data into base64
+        QRCode.toDataURL(JSON.stringify(qrCodeData), function (err, code) {
+            if (err) return console.log(err)
+
+            // Printing the code
+            console.log(code)
+        })
+
         const emailSend = await sendMailWithGmail(mailData)
-        // console.log('emailsend Data', emailSend);
+        console.log('emailsend Data', emailSend);
 
         if (emailSend.messageId) {
             const updateData = {

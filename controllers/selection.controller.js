@@ -108,15 +108,31 @@ exports.sendInvitationmail = async (req, res) => {
         }
 
         // Converting the data into base64
-        QRCode.toDataURL(JSON.stringify(qrCodeData), function (err, code) {
-            if (err) return console.log(err)
+        // const qrCode = QRCode.toDataURL(JSON.stringify(qrCodeData), function (err, code) {
+        //     if (err) {
+        //         return console.log(err)
+        //     }
+        //     else {
+        //         console.log('inside', code);
+        //         return code;
+        //     }
+        //     // Printing the code
+        //     // console.log(code)
+        // })
 
-            // Printing the code
-            console.log(code)
-        })
+        QRCode.toFile('myQrCode.png', JSON.stringify(qrCodeData), {
+            type: 'png',
+            errorCorrectionLevel: 'H',
+            margin: 1,
+            scale: 8
+        }, (err) => {
+            if (err) throw err;
+            console.log('QR code generated');
+        });
+
 
         const emailSend = await sendMailWithGmail(mailData)
-        console.log('emailsend Data', emailSend);
+        // console.log('emailsend Data', emailSend);
 
         if (emailSend.messageId) {
             const updateData = {

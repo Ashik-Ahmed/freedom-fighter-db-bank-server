@@ -12,3 +12,7 @@ exports.getAllCategoriesService = async () => {
     const result = await MemberCategory.find({})
     return result;
 }
+
+exports.deleteMemberCategoryByIdService = async (categoryId) => {
+    console.log(categoryId);
+}

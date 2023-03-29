@@ -1,4 +1,5 @@
-const { addMemberCategoryService, getAllCategoriesService } = require("../services/memberCategory.service");
+const { deleteEventService } = require("../services/event.service");
+const { addMemberCategoryService, getAllCategoriesService, deleteMemberCategoryByIdService } = require("../services/memberCategory.service");
 
 
 exports.addMemberCategory = async (req, res) => {
@@ -30,7 +31,6 @@ exports.addMemberCategory = async (req, res) => {
 exports.getAllCategories = async (req, res) => {
     try {
         const result = await getAllCategoriesService()
-        console.log(result);
         if (result) {
             res.status(200).json({
                 status: 'Success',
@@ -41,6 +41,30 @@ exports.getAllCategories = async (req, res) => {
             res.ststus(400).json({
                 status: 'failed',
                 error: 'Failed to load data'
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            error: error.message
+        })
+    }
+}
+
+exports.deleteMemberCategoryById = async (req, res) => {
+    try {
+        const { categoryId } = req.params
+        const result = await deleteMemberCategoryByIdService(categoryId)
+        if (result) {
+            res.status(200).json({
+                status: 'Success',
+                data: result
+            })
+        }
+        else {
+            res.status(400).json({
+                status: 'failed',
+                error: 'Failed! Please try again'
             })
         }
     } catch (error) {

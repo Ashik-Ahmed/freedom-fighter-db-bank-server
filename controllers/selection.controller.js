@@ -107,7 +107,7 @@ exports.sendInvitationmail = async (req, res) => {
             year: eventToBeUpdate.year,
         }
 
-
+        // generate the QR code as buffer 
         QRCode.toBuffer(JSON.stringify(qrCodeData), { type: 'png' }, function (err, buffer) {
             if (err) {
                 res.status(400).send('QR Code generation failed');
@@ -115,6 +115,7 @@ exports.sendInvitationmail = async (req, res) => {
                 return;
             }
 
+            // append the generated QR code tothe mailData 
             mailData.attachments = [
                 {
                     filename: 'qr-code.png',
@@ -122,22 +123,7 @@ exports.sendInvitationmail = async (req, res) => {
                     contentType: 'image/png'
                 }
             ];
-            // Printing the code
-            // console.log(mailData)
         })
-
-        // console.log(mailData);
-
-        // QRCode.toFile('myQrCode.png', JSON.stringify(qrCodeData), {
-        //     type: 'png',
-        //     errorCorrectionLevel: 'H',
-        //     margin: 1,
-        //     scale: 8
-        // }, (err) => {
-        //     if (err) throw err;
-        //     console.log('QR code generated');
-        // });
-
 
         const emailSend = await sendMailWithGmail(mailData)
         // console.log('emailsend Data', emailSend);
@@ -148,6 +134,7 @@ exports.sendInvitationmail = async (req, res) => {
                 eventToBeUpdate,
                 invitationMail: 'Sent'
             }
+            // now update the invitationMail field of that specific event 
             const result = await sendInvitationMailService(updateData);
             if (result.modifiedCount > 0) {
                 res.status(200).json({

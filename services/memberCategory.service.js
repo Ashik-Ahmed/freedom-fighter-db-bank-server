@@ -14,5 +14,6 @@ exports.getAllCategoriesService = async () => {
 }
 
 exports.deleteMemberCategoryByIdService = async (categoryId) => {
-    console.log(categoryId);
+    const result = await MemberCategory.deleteOne({ _id: categoryId });
+    return result;
 }

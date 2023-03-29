@@ -1,10 +1,11 @@
 const express = require('express')
+const categoryategoryController = require('../controllers/memberCategory.controller')
 
 
 const router = express.Router()
 
 router.route('/')
-    .get()
+    .post(categoryategoryController.addMemberCategory)
 
 
 

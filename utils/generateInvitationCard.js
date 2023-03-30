@@ -41,6 +41,11 @@ exports.generateInvitationCard = async (qrCodeData) => {
     const qrCodeImg = await loadImage(qrCodeImage);
     ctx.drawImage(qrCodeImg, 600, 400, 150, 150);
 
+
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText('Powered by Lamda Telecom', 600, 590);
+
     // Save canvas as PNG image
     const buffer = canvas.toBuffer('image/png');
 

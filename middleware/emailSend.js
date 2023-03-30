@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer')
-const { google } = require('googleapis')
+const { google } = require('googleapis');
+const { generateInvitationCard } = require('../utils/generateInvitationCard');
 
 const oAuth2Client = new google.auth.OAuth2(
     process.env.OAUTH2_CLIENT_ID,
@@ -10,7 +11,11 @@ const oAuth2Client = new google.auth.OAuth2(
 oAuth2Client.setCredentials({ refresh_token: process.env.OAUTH2_REFRESH_TOKEN });
 
 module.exports.sendMailWithGmail = async (data) => {
+
     const oAuth2AccessToken = await oAuth2Client.getAccessToken();
+    const invitationCard = await generateInvitationCard('Ashik Ahmed', data.to)
+    console.log(invitationCard);
+
     // console.log('from gmail service', data);
 
     let transporter = nodemailer.createTransport({
@@ -24,13 +29,18 @@ module.exports.sendMailWithGmail = async (data) => {
             accessToken: oAuth2AccessToken,
         },
     })
-
     const mailData = {
         from: process.env.SENDER_MAIL,
         to: data.to,
         subject: data.subject,
         text: data.text,
-        attachments: data.attachments
+        // attachments: data.attachments
+        attachments: [
+            {
+                filename: 'invitation-card.png',
+                content: invitationCard,
+            },
+        ],
     }
 
     // console.log(mailData);

@@ -22,9 +22,9 @@ exports.insertFreedomFighter = async (req, res) => {
     console.log('backend api called for insertion');
 
     try {
-
         const memberInfo = req.body;
-        memberInfo.photo = req.file.filename
+        memberInfo.photo = req?.file?.filename
+        // console.log(memberInfo);
 
         if (memberInfo?.officialRank) {
             const officeRank = JSON.parse(memberInfo?.officialRank);
@@ -38,7 +38,7 @@ exports.insertFreedomFighter = async (req, res) => {
         // console.log(memberInfo)
 
         const freedomFighter = await insertFreedomFighterService(memberInfo)
-        // console.log(freedomFighter);
+        console.log(freedomFighter);
 
         if (freedomFighter._id) {
             res.status(200).json({

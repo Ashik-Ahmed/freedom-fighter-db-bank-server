@@ -10,11 +10,10 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: process.env.OAUTH2_REFRESH_TOKEN });
 
-module.exports.sendMailWithGmail = async (data) => {
+module.exports.sendMailWithGmail = async ({ mailInfo, qrCodeData }) => {
 
     const oAuth2AccessToken = await oAuth2Client.getAccessToken();
-    const invitationCard = await generateInvitationCard('Ashik Ahmed', data.to)
-    console.log(invitationCard);
+    const invitationCard = await generateInvitationCard(qrCodeData)
 
     // console.log('from gmail service', data);
 
@@ -31,9 +30,9 @@ module.exports.sendMailWithGmail = async (data) => {
     })
     const mailData = {
         from: process.env.SENDER_MAIL,
-        to: data.to,
-        subject: data.subject,
-        text: data.text,
+        to: mailInfo.to,
+        subject: mailInfo.subject,
+        text: mailInfo.text,
         // attachments: data.attachments
         attachments: [
             {

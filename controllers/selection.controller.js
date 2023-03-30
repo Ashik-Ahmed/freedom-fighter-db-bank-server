@@ -102,30 +102,33 @@ exports.sendInvitationmail = async (req, res) => {
         const { memberId, memberName, eventToBeUpdate, mailData } = req.body;
         // console.log(memberId, eventToBeUpdate, mailData);
         const qrCodeData = {
+            memberId,
             memberName,
             event: eventToBeUpdate.name,
             year: eventToBeUpdate.year,
         }
 
+        //comment out as the qr code is now generating in the generateInitationCard middleware file
         // generate the QR code as buffer 
-        QRCode.toBuffer(JSON.stringify(qrCodeData), { type: 'png' }, function (err, buffer) {
-            if (err) {
-                res.status(400).send('QR Code generation failed');
-                console.log(err)
-                return;
-            }
 
-            // append the generated QR code tothe mailData 
-            mailData.attachments = [
-                {
-                    filename: 'qr-code.png',
-                    content: buffer,
-                    contentType: 'image/png'
-                }
-            ];
-        })
+        // QRCode.toBuffer(JSON.stringify(qrCodeData), { type: 'png' }, function (err, buffer) {
+        //     if (err) {
+        //         res.status(400).send('QR Code generation failed');
+        //         console.log(err)
+        //         return;
+        //     }
 
-        const emailSend = await sendMailWithGmail(mailData)
+        //     // append the generated QR code tothe mailData 
+        //     mailData.attachments = [
+        //         {
+        //             filename: 'qr-code.png',
+        //             content: buffer,
+        //             contentType: 'image/png'
+        //         }
+        //     ];
+        // })
+
+        const emailSend = await sendMailWithGmail({ mailInfo: mailData, qrCodeData })
         // console.log('emailsend Data', emailSend);
 
         if (emailSend.messageId) {

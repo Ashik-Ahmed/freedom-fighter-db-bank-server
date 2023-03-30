@@ -28,8 +28,8 @@ exports.generateInvitationCard = async (name, email) => {
     const qrCodeImage = await QRCode.toDataURL(JSON.stringify(qrCodeData));
 
     // Load QR code image and draw on canvas
-    // const qrCodeImg = await loadImage(qrCodeImage);
-    // ctx.drawImage(qrCodeImg, 500, 350, 200, 200);
+    const qrCodeImg = await loadImage(qrCodeImage);
+    ctx.drawImage(qrCodeImg, 500, 350, 200, 200);
 
     // Save canvas as PNG image
     const buffer = canvas.toBuffer('image/png');

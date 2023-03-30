@@ -7,7 +7,6 @@ exports.generateInvitationCard = async (qrCodeData) => {
     // Load background image
     const canvas = createCanvas(800, 600);
     const ctx = canvas.getContext('2d');
-    console.log('QR data: ', qrCodeData);
     // const backgroundImage = await loadImage(`F:\Projects\freedom-fighter-db-bank\freedom-fighter-db-bank-server\bgImage.png`);
     // ctx.drawImage(canvas.width, canvas.height);
 
@@ -40,7 +39,7 @@ exports.generateInvitationCard = async (qrCodeData) => {
 
     // Load QR code image and draw on canvas
     const qrCodeImg = await loadImage(qrCodeImage);
-    ctx.drawImage(qrCodeImg, 550, 400, 150, 150);
+    ctx.drawImage(qrCodeImg, 600, 400, 150, 150);
 
     // Save canvas as PNG image
     const buffer = canvas.toBuffer('image/png');

@@ -18,21 +18,21 @@ exports.generateInvitationCard = async (qrCodeData) => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Add text to the image
-    ctx.font = 'bold 52px Arial';
+    ctx.font = 'bold 40px Arial';
     ctx.fillStyle = '#000000';
-    ctx.fillText(`Invitation Card`, 100, 50);
+    ctx.fillText(`-: Invitation Card :-`, 200, 50);
 
     ctx.font = 'bold 52px Arial';
     ctx.fillStyle = '#000000';
-    ctx.fillText(`${event} - ${year}`, 100, 50);
+    ctx.fillText(`${event} - ${year}`, 100, 100);
 
 
     ctx.font = 'bold 24px Arial';
     ctx.fillStyle = '#000000';
-    ctx.fillText(`Dear ${memberName},`, 100, 200);
+    ctx.fillText(`Dear ${memberName},`, 50, 250);
 
-    ctx.font = 'bold 16px Arial';
-    ctx.fillText('You are invited to our party!', 100, 300);
+    ctx.font = 'bold 20px Arial';
+    ctx.fillText('You are invited to our party!', 50, 280);
 
     // Generate QR code
     // const qrCodeData = { name, email };
@@ -40,7 +40,7 @@ exports.generateInvitationCard = async (qrCodeData) => {
 
     // Load QR code image and draw on canvas
     const qrCodeImg = await loadImage(qrCodeImage);
-    ctx.drawImage(qrCodeImg, 500, 350, 200, 200);
+    ctx.drawImage(qrCodeImg, 600, 380, 200, 200);
 
     // Save canvas as PNG image
     const buffer = canvas.toBuffer('image/png');

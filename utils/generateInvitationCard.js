@@ -12,7 +12,7 @@ exports.generateInvitationCard = async (qrCodeData) => {
     // ctx.drawImage(canvas.width, canvas.height);
 
     // Set the background color to red
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = '#FF5733';
 
     // Fill the entire canvas with the background color
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -40,7 +40,7 @@ exports.generateInvitationCard = async (qrCodeData) => {
 
     // Load QR code image and draw on canvas
     const qrCodeImg = await loadImage(qrCodeImage);
-    ctx.drawImage(qrCodeImg, 600, 380, 200, 200);
+    ctx.drawImage(qrCodeImg, 550, 400, 150, 150);
 
     // Save canvas as PNG image
     const buffer = canvas.toBuffer('image/png');

@@ -104,6 +104,7 @@ exports.sendInvitationmail = async (req, res) => {
         const qrCodeData = {
             memberId,
             memberName,
+            invitationText: mailData.text,
             event: eventToBeUpdate.name,
             year: eventToBeUpdate.year,
         }

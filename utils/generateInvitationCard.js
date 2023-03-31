@@ -3,7 +3,7 @@ const QRCode = require('qrcode');
 
 exports.generateInvitationCard = async (qrCodeData) => {
 
-    const { memberId, memberName, event, year } = qrCodeData;
+    const { memberId, memberName, invitationText, event, year } = qrCodeData;
     // Load background image
     const canvas = createCanvas(800, 600);
     const ctx = canvas.getContext('2d');
@@ -21,17 +21,43 @@ exports.generateInvitationCard = async (qrCodeData) => {
     ctx.fillStyle = '#000000';
     ctx.fillText(`-: Invitation Card :-`, 200, 50);
 
-    ctx.font = 'bold 52px Arial';
-    ctx.fillStyle = '#000000';
-    ctx.fillText(`${event} - ${year}`, 100, 100);
+    // ctx.font = 'bold 52px Arial';
+    // ctx.fillStyle = '#000000';
+    // ctx.fillText(`${event} - ${year}`, 100, 100);
 
 
     ctx.font = 'bold 24px Arial';
     ctx.fillStyle = '#000000';
-    ctx.fillText(`Dear ${memberName},`, 50, 250);
+    ctx.fillText(`Dear ${memberName},`, 50, 150);
 
-    ctx.font = 'bold 20px Arial';
-    ctx.fillText('You are invited to our party!', 50, 280);
+
+    // Set the max text width
+    // const maxWidth = canvas.width - 20;
+
+    // // Split the text into multiple lines
+    // let words = invitationText.replace('Dear Respected Member,').split(' ');
+    // let line = '';
+    // let lines = [];
+
+    // for (let i = 0; i < words.length; i++) {
+    //     let testLine = line + words[i] + ' ';
+    //     let metrics = ctx.measureText(testLine);
+    //     let testWidth = metrics.width;
+    //     if (testWidth > maxWidth && i > 0) {
+    //         lines.push(line);
+    //         line = words[i] + ' ';
+    //     } else {
+    //         line = testLine;
+    //     }
+    // }
+    // lines.push(line);
+
+
+    ctx.font = '16px Arial';
+    ctx.fillText(`${invitationText.replace('Dear Respected Member,')}`, 50, 170);
+    // for (let i = 0; i < lines.length; i++) {
+    //     ctx.fillText(lines[i], 50, 170 + i * 25);
+    // }
 
     // Generate QR code
     // const qrCodeData = { name, email };

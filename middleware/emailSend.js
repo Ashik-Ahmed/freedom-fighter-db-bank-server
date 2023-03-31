@@ -32,7 +32,8 @@ module.exports.sendMailWithGmail = async ({ mailInfo, qrCodeData }) => {
         from: process.env.SENDER_MAIL,
         to: mailInfo.to,
         subject: mailInfo.subject,
-        text: mailInfo.text,
+        text: `Dear ${qrCodeData.memberName}, 
+                ${mailInfo.text}`,
         // attachments: data.attachments
         attachments: [
             {

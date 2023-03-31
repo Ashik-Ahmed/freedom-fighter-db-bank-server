@@ -139,7 +139,7 @@ exports.sendInvitationmail = async (req, res) => {
                 invitationMail: 'Sent'
             }
             // now update the invitationMail field of that specific event 
-            const result = await sendInvitationMailService(updateData);
+            // const result = await sendInvitationMailService(updateData);
             if (result.modifiedCount > 0) {
                 res.status(200).json({
                     status: 'Success',

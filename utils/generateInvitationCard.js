@@ -26,16 +26,16 @@ exports.generateInvitationCard = async (qrCodeData) => {
     // ctx.fillText(`${event} - ${year}`, 100, 100);
 
 
-    ctx.font = 'bold 24px Arial';
+    ctx.font = 'bold 20px Arial';
     ctx.fillStyle = '#000000';
     ctx.fillText(`Dear ${memberName},`, 50, 150);
 
 
     // Set the max text width
-    const maxWidth = canvas.width - 20;
+    const maxWidth = canvas.width - 10;
 
     // Split the text into multiple lines
-    let words = invitationText.replace('Dear Respected Member,').split(' ');
+    let words = invitationText.split(' ');
     let line = '';
     let lines = [];
 

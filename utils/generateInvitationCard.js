@@ -32,32 +32,32 @@ exports.generateInvitationCard = async (qrCodeData) => {
 
 
     // Set the max text width
-    // const maxWidth = canvas.width - 20;
+    const maxWidth = canvas.width - 20;
 
-    // // Split the text into multiple lines
-    // let words = invitationText.replace('Dear Respected Member,').split(' ');
-    // let line = '';
-    // let lines = [];
+    // Split the text into multiple lines
+    let words = invitationText.replace('Dear Respected Member,').split(' ');
+    let line = '';
+    let lines = [];
 
-    // for (let i = 0; i < words.length; i++) {
-    //     let testLine = line + words[i] + ' ';
-    //     let metrics = ctx.measureText(testLine);
-    //     let testWidth = metrics.width;
-    //     if (testWidth > maxWidth && i > 0) {
-    //         lines.push(line);
-    //         line = words[i] + ' ';
-    //     } else {
-    //         line = testLine;
-    //     }
-    // }
-    // lines.push(line);
+    for (let i = 0; i < words.length; i++) {
+        let testLine = line + words[i] + ' ';
+        let metrics = ctx.measureText(testLine);
+        let testWidth = metrics.width;
+        if (testWidth > maxWidth && i > 0) {
+            lines.push(line);
+            line = words[i] + ' ';
+        } else {
+            line = testLine;
+        }
+    }
+    lines.push(line);
 
 
     ctx.font = '16px Arial';
-    ctx.fillText(`${invitationText.replace('Dear Respected Member,')}`, 50, 170);
-    // for (let i = 0; i < lines.length; i++) {
-    //     ctx.fillText(lines[i], 50, 170 + i * 25);
-    // }
+    // ctx.fillText(`${invitationText.replace('Dear Respected Member,')}`, 50, 170);
+    for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], 50, 170 + i * 25);
+    }
 
     // Generate QR code
     // const qrCodeData = { name, email };

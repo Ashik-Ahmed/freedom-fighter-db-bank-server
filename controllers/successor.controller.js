@@ -10,13 +10,13 @@ exports.createSuccessor = async (req, res) => {
         // console.log(successor)
 
         res.status(200).json({
-            status: 'success',
-            message: 'Successfully created Successor'
+            status: 'Success',
+            message: 'Successfully Added Successor'
         })
 
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
+            status: 'Failed',
             error: error.message
         })
     }

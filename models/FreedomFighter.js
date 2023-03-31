@@ -15,6 +15,9 @@ const freedomFighterSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    freedomFighterNumber: {
+        type: String
+    },
     email: {
         type: String,
         required: [true, "Email is required"],

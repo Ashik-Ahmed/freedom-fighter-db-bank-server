@@ -1,9 +1,11 @@
 const { createCanvas, loadImage } = require('canvas');
 const QRCode = require('qrcode');
 
-exports.generateInvitationCard = async (qrCodeData) => {
+exports.generateInvitationCard = async (data) => {
 
-    const { memberId, memberName, invitationText, event, year } = qrCodeData;
+    // const { invitationText } = data;
+    const { invitationText, ...qrCodeData } = data
+    const { memberName } = qrCodeData
     // Load background image
     const canvas = createCanvas(800, 600);
     const ctx = canvas.getContext('2d');
@@ -35,7 +37,7 @@ exports.generateInvitationCard = async (qrCodeData) => {
     const maxWidth = canvas.width - 10;
 
     // Split the text into multiple lines
-    let words = invitationText.split(' ');
+    let words = data.invitationText.split(' ');
     let line = '';
     let lines = [];
 
@@ -46,17 +48,20 @@ exports.generateInvitationCard = async (qrCodeData) => {
         if (testWidth > maxWidth && i > 0) {
             lines.push(line);
             line = words[i] + ' ';
+            console.log(testWidth);
+            console.log(lines);
         } else {
             line = testLine;
         }
     }
     lines.push(line);
+    // console.log(lines);
 
 
     ctx.font = '16px Arial';
     // ctx.fillText(`${invitationText.replace('Dear Respected Member,')}`, 50, 170);
     for (let i = 0; i < lines.length; i++) {
-        ctx.fillText(lines[i], 50, 170 + i * 25);
+        ctx.fillText(lines[i], 50, 190 + i * 25);
     }
 
     // Generate QR code

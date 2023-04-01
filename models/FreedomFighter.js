@@ -15,6 +15,9 @@ const freedomFighterSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    vipStatus: {
+        type: Boolean
+    },
     freedomFighterNumber: {
         type: String
     },

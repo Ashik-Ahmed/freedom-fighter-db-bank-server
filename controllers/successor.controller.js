@@ -55,7 +55,7 @@ exports.deleteSuccessorById = async (req, res) => {
         const result = await deleteSuccessorByIdService(freedomFighterId, id);
 
         res.status(200).json({
-            status: 'success',
+            status: 'Success',
             data: result
         })
 
@@ -63,8 +63,8 @@ exports.deleteSuccessorById = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({
-            status: 'failed',
-            error: error.message
+            status: 'Failed',
+            error: error.message || 'Failed! Please try again'
         })
     }
 }

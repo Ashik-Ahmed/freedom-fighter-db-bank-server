@@ -23,11 +23,55 @@ exports.getSelectedFreedomFightersService = async (data) => {
     }
     // console.log(sortOrder);
 
+    const vipMembers = await FreedomFighter.aggregate([
+        {
+            $match:
+            {
+                $and: [
+                    { category: memberType },
+                    { vipStatus: true }
+                ]
+            }
+        },
+        {
+            $project: {
+                "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+                    $size: {
+                        $filter: {
+                            input: { $ifNull: ["$primarySelection", []] },
+                            as: "elem",
+                            cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
+                        }
+                    }
+                }
+            }
+        }
+    ])
+    // console.log(vipMembers);
+
 
     var selectedFreedomFighters = []
     if (!excludePreviousYear) {
         selectedFreedomFighters = await FreedomFighter.aggregate([
-            { $match: { category: memberType } },
+            {
+                $match:
+                {
+                    category: memberType,
+                    vipStatus: { $ne: true }
+
+
+                    //     $or: [
+                    //         {
+                    //             $and: [
+                    //                 { vipStatus: false },
+                    //                 { category: memberType },
+                    //             ]
+                    //         },
+                    //         { vipStatus: true },
+                    //         { vipStatus: { $exists: false } },
+                    //     ]
+                }
+            },
             {
                 $project: {
                     "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
@@ -56,11 +100,12 @@ exports.getSelectedFreedomFightersService = async (data) => {
             {
                 $match: {
                     category: memberType,
-                    $expr: {
-                        $gt: [
-                            { $size: "$primarySelection" }, 0   //checking if primarySelection field is empty or not
-                        ]
-                    },
+                    vipStatus: { $ne: true },
+                    // $expr: {
+                    //     $gt: [
+                    //         { $size: { $ifNull: ['$primarySelection', []] } }, 0   //checking if primarySelection field is empty or not
+                    //     ]
+                    // },
                     primarySelection: {
                         $not: {
                             $elemMatch: {
@@ -104,7 +149,8 @@ exports.getSelectedFreedomFightersService = async (data) => {
             { $limit: parseInt(total) }
         ])
     }
-    return selectedFreedomFighters;
+    vipMembers.push(...selectedFreedomFighters)
+    return vipMembers;
 }
 
 exports.updateTemporarySelectedMembersService = async (data) => {

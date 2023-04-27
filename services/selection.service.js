@@ -21,7 +21,11 @@ exports.getSelectedFreedomFightersService = async (data) => {
             })
         }
     }
-    // console.log(sortOrder);
+    // sortOrder.push({
+    //     field: "primarySelection.year",
+    //     direction: 1
+    // })
+    console.log(sortOrder);
 
     const vipMembers = await FreedomFighter.aggregate([
         {
@@ -35,7 +39,21 @@ exports.getSelectedFreedomFightersService = async (data) => {
         },
         {
             $project: {
-                "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+                "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                invitedYear: {
+                    $map: {
+                        input: {
+                            $filter: {
+                                input: { $ifNull: ["$primarySelection", []] },
+                                as: "sel",
+                                cond: { $eq: ["$$sel.verificationStatus.status", "Success"] }
+                            }
+                        },
+                        as: "filteredSel",
+                        in: "$$filteredSel.year"
+                    }
+                },
+                invitationCount: {
                     $size: {
                         $filter: {
                             input: { $ifNull: ["$primarySelection", []] },
@@ -74,7 +92,21 @@ exports.getSelectedFreedomFightersService = async (data) => {
             },
             {
                 $project: {
-                    "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+                    "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                    invitedYear: {
+                        $map: {
+                            input: {
+                                $filter: {
+                                    input: { $ifNull: ["$primarySelection", []] },
+                                    as: "sel",
+                                    cond: { $eq: ["$$sel.verificationStatus.status", "Success"] }
+                                }
+                            },
+                            as: "filteredSel",
+                            in: "$$filteredSel.year"
+                        }
+                    },
+                    invitationCount: {
                         $size: {
                             $filter: {
                                 input: { $ifNull: ["$primarySelection", []] },
@@ -127,7 +159,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
             },
             {
                 $project: {
-                    "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+                    "name": 1, "category": 1, "force": 1, "invitedYear": "$primarySelection.year", "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
                         $size: {
                             $filter: {
                                 input: { $ifNull: ["$primarySelection", []] },
@@ -150,7 +182,9 @@ exports.getSelectedFreedomFightersService = async (data) => {
         ])
     }
     vipMembers.push(...selectedFreedomFighters)
-    return vipMembers;
+    const allSelectedMembers = vipMembers;
+    // console.log(allSelectedMembers);
+    return allSelectedMembers;
 }
 
 exports.updateTemporarySelectedMembersService = async (data) => {

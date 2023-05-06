@@ -11,11 +11,12 @@ const oAuth2Client = new google.auth.OAuth2(
 oAuth2Client.setCredentials({ refresh_token: process.env.OAUTH2_REFRESH_TOKEN });
 
 module.exports.sendMailWithGmail = async ({ mailInfo, qrCodeData }) => {
-
     const oAuth2AccessToken = await oAuth2Client.getAccessToken();
+    console.log(oAuth2AccessToken);
     const invitationCard = await generateInvitationCard(qrCodeData)
 
     // console.log('from gmail service', data);
+    console.log(oAuth2AccessToken);
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -48,7 +49,7 @@ module.exports.sendMailWithGmail = async ({ mailInfo, qrCodeData }) => {
     const info = await transporter.sendMail(mailData);
 
     console.log("Message sent %s", info.messageId);
-    // console.log(info);
+    console.log(info);
 
     return info;
 }

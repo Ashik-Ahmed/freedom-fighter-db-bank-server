@@ -99,6 +99,7 @@ exports.getFinalSelectedMembers = async (req, res) => {
 
 exports.sendInvitationmail = async (req, res) => {
     try {
+        console.log('email send controller');
         const { memberId, memberName, eventToBeUpdate, mailData } = req.body;
         // console.log(memberId, eventToBeUpdate, mailData);
         const qrCodeData = {
@@ -130,7 +131,7 @@ exports.sendInvitationmail = async (req, res) => {
         // })
 
         const emailSend = await sendMailWithGmail({ mailInfo: mailData, qrCodeData })
-        // console.log('emailsend Data', emailSend);
+        console.log('emailsend Data', emailSend);
 
         if (emailSend.messageId) {
             const updateData = {

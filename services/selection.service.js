@@ -3,7 +3,7 @@ const FreedomFighter = require("../models/FreedomFighter");
 
 //get selected freedom fighters
 exports.getSelectedFreedomFightersService = async (data) => {
-
+    console.log(data);
     const { total, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(data.data);
 
     // const { memberType, total, selectionCriteria, excludePreviousYear, yearOfInvitation } = data;
@@ -252,6 +252,6 @@ exports.sendInvitationMailService = async (data) => {
     // console.log(memberId, eventToBeUpdate, invitationMail);
     const result = await FreedomFighter.updateOne({ _id: memberId, primarySelection: { $elemMatch: { event: eventToBeUpdate.name, year: eventToBeUpdate.year } } }, { $set: { "primarySelection.$.invitationMail": invitationMail } });
 
-    // console.log(result);
+    console.log(result);
     return result;
 }

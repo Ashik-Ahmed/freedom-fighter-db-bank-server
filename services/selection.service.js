@@ -3,8 +3,8 @@ const FreedomFighter = require("../models/FreedomFighter");
 
 //get selected freedom fighters
 exports.getSelectedFreedomFightersService = async (data) => {
-    console.log(data);
-    const { total, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(data.data);
+
+    const { total, alive, dead, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(data.data);
 
     // const { memberType, total, selectionCriteria, excludePreviousYear, yearOfInvitation } = data;
     // console.log(memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);

@@ -39,7 +39,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
         },
         {
             $project: {
-                "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
                 invitedYear: {
                     $map: {
                         input: {
@@ -92,7 +92,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
             },
             {
                 $project: {
-                    "name": 1, "category": 1, "force": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                    "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
                     invitedYear: {
                         $map: {
                             input: {
@@ -158,8 +158,33 @@ exports.getSelectedFreedomFightersService = async (data) => {
                 }
             },
             {
+                // $project: {
+                //     "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "invitedYear": "$primarySelection.year", "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+                //         $size: {
+                //             $filter: {
+                //                 input: { $ifNull: ["$primarySelection", []] },
+                //                 as: "elem",
+                //                 cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
+                //             }
+                //         }
+                //     }
+                // }
                 $project: {
-                    "name": 1, "category": 1, "force": 1, "invitedYear": "$primarySelection.year", "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point", invitationCount: {
+                    "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                    invitedYear: {
+                        $map: {
+                            input: {
+                                $filter: {
+                                    input: { $ifNull: ["$primarySelection", []] },
+                                    as: "sel",
+                                    cond: { $eq: ["$$sel.verificationStatus.status", "Success"] }
+                                }
+                            },
+                            as: "filteredSel",
+                            in: "$$filteredSel.year"
+                        }
+                    },
+                    invitationCount: {
                         $size: {
                             $filter: {
                                 input: { $ifNull: ["$primarySelection", []] },

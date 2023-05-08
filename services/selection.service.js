@@ -8,7 +8,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
 
     // const { memberType, total, selectionCriteria, excludePreviousYear, yearOfInvitation } = data;
     // console.log(memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);
-    // console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
+    console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
     // const sortCriteria = JSON.parse(selectionCriteria)
 
     const sortOrder = [];

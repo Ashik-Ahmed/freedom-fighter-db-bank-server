@@ -24,6 +24,9 @@ router.route('/final-selection')
 router.route('/send-invitation-mail')
     .post(selectionController.sendInvitationmail)
 
+router.route('/test-selection')
+    .get(selectionController.testSelection)
+
 
 
 module.exports = router;

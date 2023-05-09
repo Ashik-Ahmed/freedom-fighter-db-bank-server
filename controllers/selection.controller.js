@@ -241,8 +241,8 @@ exports.testSelection = async (req, res) => {
 
     // const totalMembers = await FreedomFighter.countDocuments({ category: memberType, vipStatus: { $ne: true } });
 
-    console.log('total percentage: ', alive + dead);
-    if (alive + dead != 100) {
+    console.log('total percentage: ', parseInt(alive) + parseInt(dead));
+    if (parseInt(alive) + parseInt(dead) != 100) {
         return res.status(400).json({
             status: 'Failed',
             message: 'Percentage count not right'

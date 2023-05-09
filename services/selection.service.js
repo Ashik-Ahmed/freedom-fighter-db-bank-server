@@ -7,15 +7,20 @@ exports.getSelectedFreedomFightersService = async (data) => {
     const { total, alivePercentage, deadPercentage, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(data.data);
 
 
+    console.log('total: ', total);
     console.log('percentage: ', alivePercentage, deadPercentage);
     // const { memberType, total, selectionCriteria, excludePreviousYear, yearOfInvitation } = data;
-    // console.log(memberType, total, selectionCriteria, firstCriteria, secondCriteria, thirdCriteria, excludePreviousYear);
-    console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
+    // console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
     // const sortCriteria = JSON.parse(selectionCriteria)
 
-    const aliveMembersCount = Math.round(total * (alivePercentage / 100));
-    const deadMembersCount = Math.round(total * (deadPercentage / 100));
+    const aliveMembersCount = parseInt(Math.round(total * (alivePercentage / 100)));
+    var deadMembersCount = parseInt(Math.round(total * (deadPercentage / 100)));
 
+    if (aliveMembersCount + deadMembersCount > parseInt(total)) {
+        deadMembersCount = deadMembersCount - 1
+    }
+
+    console.log('Alive count: ', aliveMembersCount, 'Dead count: ', deadMembersCount,);
     const sortOrder = [];
 
     for (const key in selectionCriteria) {
@@ -30,7 +35,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
     //     field: "primarySelection.year",
     //     direction: 1
     // })
-    console.log(sortOrder);
+    // console.log(sortOrder);
 
     const vipMembers = await FreedomFighter.aggregate([
         {
@@ -44,7 +49,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
         },
         {
             $project: {
-                "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                "name": 1, "category": 1, "vipStatus": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
                 invitedYear: {
                     $map: {
                         input: {
@@ -98,7 +103,8 @@ exports.getSelectedFreedomFightersService = async (data) => {
             },
             {
                 $project: {
-                    "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                    "name": 1, "category": 1,
+                    "vipStatus": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
                     invitedYear: {
                         $map: {
                             input: {
@@ -140,7 +146,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
                 {
                     category: memberType,
                     vipStatus: { $ne: true },
-                    status: 'Alive'
+                    status: 'Dead'
 
 
                     //     $or: [
@@ -157,7 +163,8 @@ exports.getSelectedFreedomFightersService = async (data) => {
             },
             {
                 $project: {
-                    "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                    "name": 1, "category": 1,
+                    "vipStatus": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
                     invitedYear: {
                         $map: {
                             input: {
@@ -226,6 +233,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
                 $project: {
                     "name": 1,
                     "category": 1,
+                    "vipStatus": 1,
                     "force": 1,
                     "status": 1,
                     "invited": 1,
@@ -299,6 +307,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
                 $project: {
                     "name": 1,
                     "category": 1,
+                    "vipStatus": 1,
                     "force": 1,
                     "status": 1,
                     "invited": 1,

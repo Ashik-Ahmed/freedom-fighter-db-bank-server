@@ -6,7 +6,6 @@ const QRCode = require('qrcode')
 exports.selectFreedomFighters = async (req, res) => {
     try {
         const { alivePercentage, deadPercentage, } = JSON.parse(req.query.data);
-        console.log('percentage: ', alivePercentage, deadPercentage,);
 
         if (parseInt(alivePercentage) + parseInt(deadPercentage) != 100) {
             return res.status(401).json({

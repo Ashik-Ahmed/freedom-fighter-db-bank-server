@@ -124,6 +124,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
                 }, {})
             },
             { $limit: parseInt(total) }
+
         ])
     }
 
@@ -170,7 +171,16 @@ exports.getSelectedFreedomFightersService = async (data) => {
                 //     }
                 // }
                 $project: {
-                    "name": 1, "category": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                    "name": 1,
+                    "category": 1,
+                    // "force": 1,
+                    "status": 1,
+                    // "invited": 1,
+                    // "forceRank": "$officialRank.rank",
+                    // "officialRank": 1,
+                    // "freedomFighterRank": 1,
+                    // "fighterRank": "$freedomFighterRank.rank",
+                    // "fighterPoint": "$freedomFighterRank.point",
                     invitedYear: {
                         $map: {
                             input: {
@@ -208,7 +218,7 @@ exports.getSelectedFreedomFightersService = async (data) => {
     }
     vipMembers.push(...selectedFreedomFighters)
     const allSelectedMembers = vipMembers;
-    // console.log(allSelectedMembers);
+    // console.log(selectedFreedomFighters);
     return allSelectedMembers;
 }
 

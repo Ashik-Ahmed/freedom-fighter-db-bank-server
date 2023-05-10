@@ -5,15 +5,37 @@ const QRCode = require('qrcode')
 
 exports.selectFreedomFighters = async (req, res) => {
     try {
-        const { alivePercentage, deadPercentage, } = JSON.parse(req.query.data);
 
+        const { total, alivePercentage, deadPercentage, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(req.query.data);
+        console.log(alivePercentage, deadPercentage,);
         if (parseInt(alivePercentage) + parseInt(deadPercentage) != 100) {
             return res.status(401).json({
                 status: 'Failed',
-                message: 'Percentage count not right'
+                error: 'Wrong Percentage count'
             })
         }
-        const selectedFreedomFighters = await getSelectedFreedomFightersService(req.query)
+
+        const aliveMembersCount = parseInt(Math.round(total * (alivePercentage / 100)));
+        var deadMembersCount = parseInt(Math.round(total * (deadPercentage / 100)));
+
+
+        console.log('total: ', total, 'aliveMembersCount: ', aliveMembersCount, 'deadMembersCount: ', deadMembersCount);
+        // if aliveMembersCount=3.5 and deadMembersCount=2.5 then sum become 6  which is greater than total value 5
+        if (aliveMembersCount + deadMembersCount > parseInt(total) && deadMembersCount !== 0) {
+            deadMembersCount = deadMembersCount - 1
+        }
+
+        if (deadMembersCount < 1) {
+            deadMembersCount = deadMembersCount + 1
+        }
+
+        console.log('total: ', total, 'aliveMembersCount: ', aliveMembersCount, 'deadMembersCount: ', deadMembersCount);
+
+        const filterData = {
+            total, aliveMembersCount, deadMembersCount, memberType, eventDetails, selectionCriteria, excludePreviousYear
+        }
+
+        const selectedFreedomFighters = await getSelectedFreedomFightersService(filterData)
         res.status(200).json({
             status: 'Success',
             data: selectedFreedomFighters

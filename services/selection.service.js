@@ -4,23 +4,16 @@ const FreedomFighter = require("../models/FreedomFighter");
 //get selected freedom fighters
 exports.getSelectedFreedomFightersService = async (data) => {
 
-    const { total, alivePercentage, deadPercentage, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(data.data);
+    // const { total, alivePercentage, deadPercentage, memberType, eventDetails, selectionCriteria, excludePreviousYear } = JSON.parse(data.data);
+    const { total, aliveMembersCount, deadMembersCount, memberType, eventDetails, selectionCriteria, excludePreviousYear } = data;
 
-
-    console.log('total: ', total);
-    console.log('percentage: ', alivePercentage, deadPercentage);
     // const { memberType, total, selectionCriteria, excludePreviousYear, yearOfInvitation } = data;
     // console.log(total, memberType, eventDetails, selectionCriteria, excludePreviousYear);
     // const sortCriteria = JSON.parse(selectionCriteria)
 
-    const aliveMembersCount = parseInt(Math.round(total * (alivePercentage / 100)));
-    var deadMembersCount = parseInt(Math.round(total * (deadPercentage / 100)));
+    // const aliveMembersCount = parseInt(Math.round(total * (alivePercentage / 100)));
+    // var deadMembersCount = parseInt(Math.round(total * (deadPercentage / 100)));
 
-    if (aliveMembersCount + deadMembersCount > parseInt(total)) {
-        deadMembersCount = deadMembersCount - 1
-    }
-
-    console.log('Alive count: ', aliveMembersCount, 'Dead count: ', deadMembersCount,);
     const sortOrder = [];
 
     for (const key in selectionCriteria) {
@@ -31,11 +24,6 @@ exports.getSelectedFreedomFightersService = async (data) => {
             })
         }
     }
-    // sortOrder.push({
-    //     field: "primarySelection.year",
-    //     direction: 1
-    // })
-    // console.log(sortOrder);
 
     const vipMembers = await FreedomFighter.aggregate([
         {

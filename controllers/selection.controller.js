@@ -25,9 +25,9 @@ exports.selectFreedomFighters = async (req, res) => {
             deadMembersCount = deadMembersCount - 1
         }
 
-        if (deadMembersCount < 1) {
-            deadMembersCount = deadMembersCount + 1
-        }
+        // if (deadMembersCount < 1) {
+        //     deadMembersCount = deadMembersCount + 1
+        // }
 
         console.log('total: ', total, 'aliveMembersCount: ', aliveMembersCount, 'deadMembersCount: ', deadMembersCount);
 

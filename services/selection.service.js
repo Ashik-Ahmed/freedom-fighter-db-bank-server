@@ -128,67 +128,70 @@ exports.getSelectedFreedomFightersService = async (data) => {
         ])
 
 
-        const deadSelectedMembers = await FreedomFighter.aggregate([
-            {
-                $match:
+        if (deadMembersCount > 0) {
+            const deadSelectedMembers = await FreedomFighter.aggregate([
                 {
-                    category: memberType,
-                    vipStatus: { $ne: true },
-                    status: 'Dead'
+                    $match:
+                    {
+                        category: memberType,
+                        vipStatus: { $ne: true },
+                        status: 'Dead'
 
 
-                    //     $or: [
-                    //         {
-                    //             $and: [
-                    //                 { vipStatus: false },
-                    //                 { category: memberType },
-                    //             ]
-                    //         },
-                    //         { vipStatus: true },
-                    //         { vipStatus: { $exists: false } },
-                    //     ]
-                }
-            },
-            {
-                $project: {
-                    "name": 1, "category": 1,
-                    "vipStatus": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
-                    invitedYear: {
-                        $map: {
-                            input: {
+                        //     $or: [
+                        //         {
+                        //             $and: [
+                        //                 { vipStatus: false },
+                        //                 { category: memberType },
+                        //             ]
+                        //         },
+                        //         { vipStatus: true },
+                        //         { vipStatus: { $exists: false } },
+                        //     ]
+                    }
+                },
+                {
+                    $project: {
+                        "name": 1, "category": 1,
+                        "vipStatus": 1, "force": 1, "status": 1, "invited": 1, "forceRank": "$officialRank.rank", "officialRank": 1, "freedomFighterRank": 1, "fighterRank": "$freedomFighterRank.rank", "fighterPoint": "$freedomFighterRank.point",
+                        invitedYear: {
+                            $map: {
+                                input: {
+                                    $filter: {
+                                        input: { $ifNull: ["$primarySelection", []] },
+                                        as: "sel",
+                                        cond: { $eq: ["$$sel.verificationStatus.status", "Success"] }
+                                    }
+                                },
+                                as: "filteredSel",
+                                in: "$$filteredSel.year"
+                            }
+                        },
+                        invitationCount: {
+                            $size: {
                                 $filter: {
                                     input: { $ifNull: ["$primarySelection", []] },
-                                    as: "sel",
-                                    cond: { $eq: ["$$sel.verificationStatus.status", "Success"] }
+                                    as: "elem",
+                                    cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
                                 }
-                            },
-                            as: "filteredSel",
-                            in: "$$filteredSel.year"
-                        }
-                    },
-                    invitationCount: {
-                        $size: {
-                            $filter: {
-                                input: { $ifNull: ["$primarySelection", []] },
-                                as: "elem",
-                                cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
                             }
                         }
                     }
-                }
-            },
-            {
-                $sort: sortOrder.reduce((acc, sort) => {
-                    acc[sort.field] = sort.direction == 1 ? 1 : -1;
-                    return acc;
-                }, {})
-            },
-            { $limit: parseInt(deadMembersCount) }
+                },
+                {
+                    $sort: sortOrder.reduce((acc, sort) => {
+                        acc[sort.field] = sort.direction == 1 ? 1 : -1;
+                        return acc;
+                    }, {})
+                },
+                { $limit: parseInt(deadMembersCount) }
 
-        ])
+            ])
+
+            selectedMembers.push(...deadSelectedMembers)
+        }
 
         selectedMembers.push(...aliveSelectedMembers);
-        selectedMembers.push(...deadSelectedMembers)
     }
 
     else {

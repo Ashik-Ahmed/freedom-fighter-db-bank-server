@@ -269,80 +269,83 @@ exports.getSelectedFreedomFightersService = async (data) => {
         ])
 
 
-        const deadSelectedMembers = await FreedomFighter.aggregate([
-            {
-                $match: {
-                    category: memberType,
-                    vipStatus: { $ne: true },
-                    status: 'Dead',
-                    primarySelection: {
-                        $not: {
-                            $elemMatch: {
-                                $and: [
-                                    {
-                                        event: eventDetails.event
-                                    },
-                                    {
-                                        year: (eventDetails.year - 1).toString()    //converting to String as year field declared as String in the model
-                                    },
-                                    {
-                                        verificationStatus: { status: 'Success' }
-                                    }
-                                ]
+        if (deadMembersCount > 0) {
+            const deadSelectedMembers = await FreedomFighter.aggregate([
+                {
+                    $match: {
+                        category: memberType,
+                        vipStatus: { $ne: true },
+                        status: 'Dead',
+                        primarySelection: {
+                            $not: {
+                                $elemMatch: {
+                                    $and: [
+                                        {
+                                            event: eventDetails.event
+                                        },
+                                        {
+                                            year: (eventDetails.year - 1).toString()    //converting to String as year field declared as String in the model
+                                        },
+                                        {
+                                            verificationStatus: { status: 'Success' }
+                                        }
+                                    ]
+                                }
                             }
                         }
                     }
-                }
-            },
-            {
-                $project: {
-                    "name": 1,
-                    "category": 1,
-                    "vipStatus": 1,
-                    "force": 1,
-                    "status": 1,
-                    "invited": 1,
-                    "forceRank": "$officialRank.rank",
-                    "officialRank": 1,
-                    "freedomFighterRank": 1,
-                    "fighterRank": "$freedomFighterRank.rank",
-                    "fighterPoint": "$freedomFighterRank.point",
-                    invitedYear: {
-                        $map: {
-                            input: {
+                },
+                {
+                    $project: {
+                        "name": 1,
+                        "category": 1,
+                        "vipStatus": 1,
+                        "force": 1,
+                        "status": 1,
+                        "invited": 1,
+                        "forceRank": "$officialRank.rank",
+                        "officialRank": 1,
+                        "freedomFighterRank": 1,
+                        "fighterRank": "$freedomFighterRank.rank",
+                        "fighterPoint": "$freedomFighterRank.point",
+                        invitedYear: {
+                            $map: {
+                                input: {
+                                    $filter: {
+                                        input: { $ifNull: ["$primarySelection", []] },
+                                        as: "sel",
+                                        cond: { $eq: ["$$sel.verificationStatus.status", "Success"] }
+                                    }
+                                },
+                                as: "filteredSel",
+                                in: "$$filteredSel.year"
+                            }
+                        },
+                        invitationCount: {
+                            $size: {
                                 $filter: {
                                     input: { $ifNull: ["$primarySelection", []] },
-                                    as: "sel",
-                                    cond: { $eq: ["$$sel.verificationStatus.status", "Success"] }
+                                    as: "elem",
+                                    cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
                                 }
-                            },
-                            as: "filteredSel",
-                            in: "$$filteredSel.year"
-                        }
-                    },
-                    invitationCount: {
-                        $size: {
-                            $filter: {
-                                input: { $ifNull: ["$primarySelection", []] },
-                                as: "elem",
-                                cond: { $eq: ["$$elem.verificationStatus.status", "Success"] }
                             }
                         }
                     }
-                }
-            },
+                },
 
-            // reduce() function creates an object that maps each sort field to its corresponding sort direction. We then pass this object to the $sort stage, which will apply the sorting based on the keys in the object.
-            {
-                $sort: sortOrder.reduce((acc, sort) => {
-                    acc[sort.field] = sort.direction == 1 ? 1 : -1;
-                    return acc;
-                }, {})
-            },
-            { $limit: parseInt(deadMembersCount) }
-        ])
+                // reduce() function creates an object that maps each sort field to its corresponding sort direction. We then pass this object to the $sort stage, which will apply the sorting based on the keys in the object.
+                {
+                    $sort: sortOrder.reduce((acc, sort) => {
+                        acc[sort.field] = sort.direction == 1 ? 1 : -1;
+                        return acc;
+                    }, {})
+                },
+                { $limit: parseInt(deadMembersCount) }
+            ])
 
-        selectedMembers.push(...aliveSelectedMembers);
+            selectedMembers.push(...aliveSelectedMembers);
+        }
+
         selectedMembers.push(...deadSelectedMembers)
     }
     vipMembers.push(...selectedMembers)

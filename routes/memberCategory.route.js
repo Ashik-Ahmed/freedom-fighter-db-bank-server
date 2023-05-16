@@ -9,6 +9,7 @@ router.route('/')
     .post(categoryController.addMemberCategory)
 
 router.route('/:categoryId')
+    .patch(categoryController.updatepriorityCriteria)
     .delete(categoryController.deleteMemberCategoryById)
 
 

@@ -11,16 +11,10 @@ const memberCategorySchema = new mongoose.Schema({
     photo: {
         type: String,
     },
-    filterCriterias: {
-        type: [{
-            label: {
-                type: String,
-            },
-            value: {
-                type: String
-            }
-        }]
-    }
+    priorityCriterias: [{
+        label: String,
+        value: String
+    }],
 },
     {
         timestamps: true

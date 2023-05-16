@@ -1,5 +1,6 @@
 const { deleteEventService } = require("../services/event.service");
-const { addMemberCategoryService, getAllCategoriesService, deleteMemberCategoryByIdService } = require("../services/memberCategory.service");
+const mongoose = require('mongoose');
+const { addMemberCategoryService, getAllCategoriesService, deleteMemberCategoryByIdService, updatepriorityCriteriaService } = require("../services/memberCategory.service");
 
 
 exports.addMemberCategory = async (req, res) => {
@@ -41,6 +42,34 @@ exports.getAllCategories = async (req, res) => {
             res.ststus(400).json({
                 status: 'failed',
                 error: 'Failed to load data'
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            error: error.message
+        })
+    }
+}
+
+exports.updatepriorityCriteria = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+        console.log('after', categoryId);
+        const priorityCriterias = req.body
+
+        const result = await updatepriorityCriteriaService(categoryId, priorityCriterias);
+
+        if (result) {
+            res.status(200).json({
+                status: 'Success',
+                data: result
+            })
+        }
+        else {
+            res.ststus(400).json({
+                status: 'Failed',
+                error: 'Failed! Please try again'
             })
         }
     } catch (error) {

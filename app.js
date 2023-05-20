@@ -16,6 +16,7 @@ const successorRoute = require('./routes/successor.route')
 const selectionRoute = require('./routes/selection.route')
 const eventRoute = require('./routes/event.route')
 const memberCategoryRoute = require('./routes/memberCategory.route')
+const reportRoute = require('./routes/reports.route')
 
 
 app.get('/', (req, res) => {
@@ -29,6 +30,7 @@ app.use('/api/v1/successor', successorRoute)
 app.use('/api/v1/selection', selectionRoute)
 app.use('/api/v1/event', eventRoute)
 app.use('/api/v1/memberCategory', memberCategoryRoute)
+app.use('/api/v1/reports', reportRoute)
 
 
 

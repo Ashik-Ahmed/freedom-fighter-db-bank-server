@@ -24,11 +24,17 @@ exports.clearanceReportService = async (data) => {
         },
         {
             $project: {
-                primarySelection: 1
+                name: 1, force: 1
+            }
+        },
+        {
+            $group: {
+                _id: "$force",
+                members: { $push: "$$ROOT" }
             }
         }
     ])
     // console.log(result);
-    return result.length;
+    return result;
 
 }

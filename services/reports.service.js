@@ -68,7 +68,16 @@ exports.clearanceReportService = async (data) => {
         const aliveOfficerApproved = totalAliveOfficerSent.filter(aliveOfficer => {
             return aliveOfficer.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
         })
-        console.log('totalAliveApproved:', aliveOfficerApproved.length);
+        const aliveORApproved = totalAliveORSent.filter(aliveOR => {
+            return aliveOR.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
+        })
+        const deadOfficerApproved = totalDeadOfficerSent.filter(deadOfficer => {
+            return deadOfficer.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
+        })
+        const deadORApproved = totalDeadORSent.filter(deadOR => {
+            return deadOR.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
+        })
+
         // const aliveORApproved = totalAliveORSent.filter(aliveOR => {
         //     if (aliveOR.primarySelection.verificationStatus.status == 'Success') {
         //         return aliveOR
@@ -95,10 +104,10 @@ exports.clearanceReportService = async (data) => {
             totalAliveOR: totalAliveORSent.length,
             totalDeadOfficer: totalDeadOfficerSent.length,
             totalDeadOR: totalDeadORSent.length,
-            aliveOfficerApproved: aliveOfficerApproved,
-            // aliveORApproved: aliveORApproved.length,
-            // deadOfficerApproved: deadOfficerApproved.length,
-            // deadORApproved: deadORApproved.length
+            aliveOfficerApproved: aliveOfficerApproved.length,
+            aliveORApproved: aliveORApproved.length,
+            deadOfficerApproved: deadOfficerApproved.length,
+            deadORApproved: deadORApproved.length
         }
         // console.log('forceData:', forceData);
         reportData.push(forceData)

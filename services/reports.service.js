@@ -8,7 +8,7 @@ exports.clearanceReportService = async (data) => {
     const currentReport = [];
     const previousYearReport = []
 
-    const members = await FreedomFighter.aggregate([
+    const currentInvitees = await FreedomFighter.aggregate([
         {
             $match: {
                 primarySelection: {
@@ -17,7 +17,10 @@ exports.clearanceReportService = async (data) => {
                         {
                             $elemMatch: {
                                 event: event,
-                                year: year
+                                $or: [
+                                    { year: year.toString() },
+                                    { year: (year - 1).toString() }
+                                ]
                             }
                         }
                     ]
@@ -26,7 +29,7 @@ exports.clearanceReportService = async (data) => {
         },
         {
             $project: {
-                name: 1, force: 1
+                name: 1, force: 1, primarySelection: 1
             }
         },
         {
@@ -36,18 +39,27 @@ exports.clearanceReportService = async (data) => {
             }
         }
     ])
-    // console.log(result);
+    console.log('current invitees : ', currentInvitees.length);
 
 
-    members.map(force => {
+
+    currentInvitees.map(force => {
         // console.log(force._id);
         // console.log(force.members.length);
         // const forceData = {};
         const totalAliveOfficerSent = force.members.filter(member => {
+            // if (member.status == 'Alive' && member.officialRank.point > 13) {
+            //     const currentInvitedMember = member.primarySelection.filter(eventData => {
+            //         if (eventData.event == event && eventData.year === year - 1) {
+            //             return eventData
+            //         }
+            //     })
+            //     return currentInvitedMember;
+            // }
+            // console.log(member);
             if (member.status == 'Alive' && member.officialRank.point > 13) {
                 return member;
             }
-            // console.log(member);
         });
         const totalAliveORSent = force.members.filter(member => {
             if (member.status == 'Alive' && member.officialRank.point < 13) {

@@ -71,10 +71,70 @@ exports.getReportService = async (data) => {
                         ]
                     }
                 },
+                aliveJCOApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Alive"] },
+                                    { $lte: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
                 deadOfficer: {
                     $sum: {
                         $cond: [
                             { $and: [{ $eq: ["$status", "Dead"] }, { $gt: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                deadOfficerApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Dead"] },
+                                    { $gt: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
                             1,
                             0
                         ]
@@ -89,6 +149,36 @@ exports.getReportService = async (data) => {
                         ]
                     }
                 },
+                deadJCOApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Dead"] },
+                                    { $lte: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
             }
         },
         {
@@ -98,8 +188,11 @@ exports.getReportService = async (data) => {
                 aliveOfficer: 1,
                 aliveOfficerApproved: 1,
                 aliveJCO: 1,
+                aliveJCOApproved: 1,
                 deadOfficer: 1,
+                deadOfficerApproved: 1,
                 deadJCO: 1,
+                deadJCOApproved: 1
             }
         }
     ])

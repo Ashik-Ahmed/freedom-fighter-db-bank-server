@@ -311,12 +311,14 @@ exports.getReportService = async (data) => {
                 aliveJCO: 1,
                 aliveJCOApproved: 1,
                 aliveJCORejected: 1,
+                totalAliveProposed: { $add: ["$aliveOfficerApproved", "$aliveJCOApproved"] },
                 deadOfficer: 1,
                 deadOfficerApproved: 1,
                 deadOfficerRejected: 1,
                 deadJCO: 1,
                 deadJCOApproved: 1,
-                deadJCORejected: 1
+                deadJCORejected: 1,
+                totalDeadProposed: { $add: ["$deadOfficerApproved", "$deadJCOApproved"] },
             }
         }
     ])

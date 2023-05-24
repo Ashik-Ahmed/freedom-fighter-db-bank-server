@@ -32,6 +32,36 @@ exports.getReportService = async (data) => {
                         ]
                     }
                 },
+                aliveOfficerApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Alive"] },
+                                    { $gt: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
                 aliveJCO: {
                     $sum: {
                         $cond: [
@@ -58,7 +88,7 @@ exports.getReportService = async (data) => {
                             0
                         ]
                     }
-                }
+                },
             }
         },
         {
@@ -66,9 +96,10 @@ exports.getReportService = async (data) => {
                 _id: 0,
                 force: "$_id",
                 aliveOfficer: 1,
+                aliveOfficerApproved: 1,
                 aliveJCO: 1,
                 deadOfficer: 1,
-                deadJCO: 1
+                deadJCO: 1,
             }
         }
     ])
@@ -142,9 +173,9 @@ exports.getReportService = async (data) => {
         }
     ])
     // console.log(result.length);
-    const reportData = [...result, ...previousYearResult]
+    const mergedresult = [...result, ...previousYearResult]
 
-    const mergedObjects = reportData.reduce((result, obj) => {
+    const mergedReport = mergedresult.reduce((result, obj) => {
         const force = obj.force;
         const existingObj = result.find(item => item.force === force);
 
@@ -158,6 +189,6 @@ exports.getReportService = async (data) => {
 
         return result;
     }, []);
-    console.log(mergedObjects);
-    return mergedObjects;
+    console.log(mergedReport);
+    return mergedReport;
 }

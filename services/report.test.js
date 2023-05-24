@@ -62,6 +62,36 @@ exports.getReportService = async (data) => {
                         ]
                     }
                 },
+                aliveOfficerRejected: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Alive"] },
+                                    { $gt: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Failed"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
                 aliveJCO: {
                     $sum: {
                         $cond: [
@@ -187,6 +217,7 @@ exports.getReportService = async (data) => {
                 force: "$_id",
                 aliveOfficer: 1,
                 aliveOfficerApproved: 1,
+                aliveOfficerRejected: 1,
                 aliveJCO: 1,
                 aliveJCOApproved: 1,
                 deadOfficer: 1,

@@ -1,14 +1,10 @@
-const FreedomFighter = require("../models/FreedomFighter");
-
+const FreedomFighter = require("../models/FreedomFighter")
 
 exports.clearanceReportService = async (data) => {
-    console.log('report service');
+
     const { event, year } = data
 
-    const currentReport = [];
-    const previousYearReport = []
-
-    const currentInvitees = await FreedomFighter.aggregate([
+    const result = await FreedomFighter.aggregate([
         {
             $match: {
                 primarySelection: {
@@ -17,10 +13,7 @@ exports.clearanceReportService = async (data) => {
                         {
                             $elemMatch: {
                                 event: event,
-                                $or: [
-                                    { year: year.toString() },
-                                    { year: (year - 1).toString() }
-                                ]
+                                year: year
                             }
                         }
                     ]
@@ -28,109 +21,309 @@ exports.clearanceReportService = async (data) => {
             }
         },
         {
-            $project: {
-                name: 1, force: 1, primarySelection: 1
+            $group: {
+                _id: "$force",
+                aliveOfficer: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Alive"] }, { $gt: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                aliveOfficerApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Alive"] },
+                                    { $gt: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                aliveOfficerRejected: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Alive"] },
+                                    { $gt: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Failed"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                aliveJCO: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Alive"] }, { $lte: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                aliveJCOApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Alive"] },
+                                    { $lte: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                aliveJCORejected: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Alive"] },
+                                    { $lte: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Failed"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                deadOfficer: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Dead"] }, { $gt: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                deadOfficerApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Dead"] },
+                                    { $gt: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                deadOfficerRejected: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Dead"] },
+                                    { $gt: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Failed"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                deadJCO: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Dead"] }, { $lte: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                deadJCOApproved: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Dead"] },
+                                    { $lte: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Success"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                deadJCORejected: {
+                    $sum: {
+                        $cond: [
+                            {
+                                $and: [
+                                    // { $eq: ["$primarySelection.verificationStatus.status", "Success"] },
+                                    { $eq: ["$status", "Dead"] },
+                                    { $lte: ["$officialRank.point", 13] },
+                                    {
+                                        $anyElementTrue: {
+                                            $map: {
+                                                input: "$primarySelection",
+                                                as: "ps",
+                                                in: {
+                                                    $and: [
+                                                        { $eq: ["$$ps.event", event] },
+                                                        { $eq: ["$$ps.year", year] },
+                                                        { $eq: ["$$ps.verificationStatus.status", "Failed"] }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            1,
+                            0
+                        ]
+                    }
+                },
             }
         },
         {
-            $group: {
-                _id: "$force",
-                members: { $push: "$$ROOT" }
+            $project: {
+                _id: 0,
+                force: "$_id",
+                aliveOfficer: 1,
+                aliveOfficerApproved: 1,
+                aliveOfficerRejected: 1,
+                aliveJCO: 1,
+                aliveJCOApproved: 1,
+                aliveJCORejected: 1,
+                totalAliveProposed: { $add: ["$aliveOfficerApproved", "$aliveJCOApproved"] },
+                deadOfficer: 1,
+                deadOfficerApproved: 1,
+                deadOfficerRejected: 1,
+                deadJCO: 1,
+                deadJCOApproved: 1,
+                deadJCORejected: 1,
+                totalDeadProposed: { $add: ["$deadOfficerApproved", "$deadJCOApproved"] },
             }
         }
     ])
-    console.log('current invitees : ', currentInvitees.length);
 
-
-
-    currentInvitees.map(force => {
-        // console.log(force._id);
-        // console.log(force.members.length);
-        // const forceData = {};
-        const totalAliveOfficerSent = force.members.filter(member => {
-            // if (member.status == 'Alive' && member.officialRank.point > 13) {
-            //     const currentInvitedMember = member.primarySelection.filter(eventData => {
-            //         if (eventData.event == event && eventData.year === year - 1) {
-            //             return eventData
-            //         }
-            //     })
-            //     return currentInvitedMember;
-            // }
-            // console.log(member);
-            if (member.status == 'Alive' && member.officialRank.point > 13) {
-                return member;
-            }
-        });
-        const totalAliveORSent = force.members.filter(member => {
-            if (member.status == 'Alive' && member.officialRank.point < 13) {
-                return member;
-            }
-        });
-        const totalDeadOfficerSent = force.members.filter(member => {
-            if (member.status == 'Dead' && member.officialRank.point > 13) {
-                return member;
-            }
-        });
-        const totalDeadORSent = force.members.filter(member => {
-            if (member.status == 'Dead' && member.officialRank.point < 13) {
-                return member;
-            }
-        });
-
-
-        // Category wise approved count 
-        const aliveOfficerApproved = totalAliveOfficerSent.filter(aliveOfficer => {
-            return aliveOfficer.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
-        })
-        const aliveORApproved = totalAliveORSent.filter(aliveOR => {
-            return aliveOR.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
-        })
-        const deadOfficerApproved = totalDeadOfficerSent.filter(deadOfficer => {
-            return deadOfficer.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
-        })
-        const deadORApproved = totalDeadORSent.filter(deadOR => {
-            return deadOR.primarySelection.some(eventData => eventData.event == event && eventData.year == year && eventData.verificationStatus.status == 'Success')
-        })
-
-        // const aliveORApproved = totalAliveORSent.filter(aliveOR => {
-        //     if (aliveOR.primarySelection.verificationStatus.status == 'Success') {
-        //         return aliveOR
-        //     }
-        // })
-        // const deadOfficerApproved = totalDeadOfficerSent.filter(deadOfficer => {
-        //     if (deadOfficer.primarySelection.verificationStatus.status == 'Success') {
-        //         return deadOfficer
-        //     }
-        // })
-        // const deadORApproved = totalDeadORSent.filter(deadOR => {
-        //     if (deadOR.primarySelection.verificationStatus.status == 'Success') {
-        //         return deadOR
-        //     }
-        // })
-
-
-        // console.log('Alive Officer:', totalAliveOfficerSent);
-        let forceData = {
-            force: force._id,
-            totalAliveOfficer: totalAliveOfficerSent.length,
-            // totalAliveOfficerApproved: totalAliveOfficerApproved.length,
-            // totalAliveOfficerReject: totalAliveOfficerSent.length - totalAliveOfficerApproved.length,
-            totalAliveOR: totalAliveORSent.length,
-            totalDeadOfficer: totalDeadOfficerSent.length,
-            totalDeadOR: totalDeadORSent.length,
-            aliveOfficerApproved: aliveOfficerApproved.length,
-            aliveORApproved: aliveORApproved.length,
-            deadOfficerApproved: deadOfficerApproved.length,
-            deadORApproved: deadORApproved.length
-        }
-        // console.log('forceData:', forceData);
-        currentReport.push(forceData)
-
-    })
-    // console.log('forceData:', reportData);
-
-    // previous year report calculation 
-    const previousYearInvitees = await FreedomFighter.aggregate([
+    const previousYearResult = await FreedomFighter.aggregate([
         {
             $match: {
                 primarySelection: {
@@ -147,72 +340,74 @@ exports.clearanceReportService = async (data) => {
             }
         },
         {
-            $project: {
-                name: 1, force: 1
+            $group: {
+                _id: "$force",
+                previousAliveOfficer: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Alive"] }, { $gt: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                previousAliveJCO: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Alive"] }, { $lte: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                previousDeadOfficer: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Dead"] }, { $gt: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                previousDeadJCO: {
+                    $sum: {
+                        $cond: [
+                            { $and: [{ $eq: ["$status", "Dead"] }, { $lte: ["$officialRank.point", 13] }] },
+                            1,
+                            0
+                        ]
+                    }
+                }
             }
         },
         {
-            $group: {
-                _id: "$force",
-                members: { $push: "$$ROOT" }
+            $project: {
+                _id: 0,
+                force: "$_id",
+                previousAliveOfficer: 1,
+                previousAliveJCO: 1,
+                previousDeadOfficer: 1,
+                previousDeadJCO: 1
             }
         }
     ])
-    console.log('previous year invited: ', previousYearInvitees.length);
+    // console.log(result.length);
+    const mergedresult = [...result, ...previousYearResult]
 
-    previousYearInvitees.map(force => {
-        const totalAliveOfficerSent = force.members.filter(member => {
-            if (member.status == 'Alive' && member.officialRank.point > 13) {
-                return member;
-            }
-            // console.log(member);
-        });
-        const totalAliveORSent = force.members.filter(member => {
-            if (member.status == 'Alive' && member.officialRank.point < 13) {
-                return member;
-            }
-        });
-        const totalDeadOfficerSent = force.members.filter(member => {
-            if (member.status == 'Dead' && member.officialRank.point > 13) {
-                return member;
-            }
-        });
-        const totalDeadORSent = force.members.filter(member => {
-            if (member.status == 'Dead' && member.officialRank.point < 13) {
-                return member;
-            }
-        });
+    const mergedReport = mergedresult.reduce((result, obj) => {
+        const force = obj.force;
+        const existingObj = result.find(item => item.force === force);
 
-
-        // Category wise approved count 
-        const aliveOfficerApproved = totalAliveOfficerSent.filter(aliveOfficer => {
-            return aliveOfficer.primarySelection.some(eventData => eventData.event == event && eventData.year == (year - 1) && eventData.verificationStatus.status == 'Success')
-        })
-        const aliveORApproved = totalAliveORSent.filter(aliveOR => {
-            return aliveOR.primarySelection.some(eventData => eventData.event == event && eventData.year == (year - 1) && eventData.verificationStatus.status == 'Success')
-        })
-        const deadOfficerApproved = totalDeadOfficerSent.filter(deadOfficer => {
-            return deadOfficer.primarySelection.some(eventData => eventData.event == event && eventData.year == (year - 1) && eventData.verificationStatus.status == 'Success')
-        })
-        const deadORApproved = totalDeadORSent.filter(deadOR => {
-            return deadOR.primarySelection.some(eventData => eventData.event == event && eventData.year == (year - 1) && eventData.verificationStatus.status == 'Success')
-        })
-
-        let forceData = {
-            force: force._id,
-            totalAliveOfficer: totalAliveOfficerSent.length,
-            totalAliveOR: totalAliveORSent.length,
-            totalDeadOfficer: totalDeadOfficerSent.length,
-            totalDeadOR: totalDeadORSent.length,
-            aliveOfficerApproved: aliveOfficerApproved.length,
-            aliveORApproved: aliveORApproved.length,
-            deadOfficerApproved: deadOfficerApproved.length,
-            deadORApproved: deadORApproved.length
+        if (existingObj) {
+            // Merge the current object with the existing object
+            Object.assign(existingObj, obj);
+        } else {
+            // Add the current object as a new entry
+            result.push(obj);
         }
-        previousYearReport.push(forceData)
-    })
 
-    const fullReport = { currentReport, previousYearReport }
-    return fullReport;
-
+        return result;
+    }, []);
+    console.log(mergedReport);
+    return mergedReport;
 }

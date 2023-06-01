@@ -103,7 +103,7 @@ exports.getFreedomFightersService = async (req) => {
             { $match: queryObject },
             {
                 $project: {
-                    name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, mobile: 1, address: 1, status: 1, invited: 1, primarySelection: 1, invitationCount: {
+                    name: 1, email: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, mobile: 1, address: 1, status: 1, invited: 1, primarySelection: 1, invitationCount: {
                         $size: {
                             $filter: {
                                 input: { $ifNull: ["$primarySelection", []] },
@@ -124,7 +124,7 @@ exports.getFreedomFightersService = async (req) => {
             { $match: queryObject },
             {
                 $project: {
-                    name: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, mobile: 1, address: 1, status: 1, invited: 1, primarySelection: 1, invitationCount: {
+                    name: 1, email: 1, category: 1, force: 1, officialRank: 1, freedomFighterRank: 1, mobile: 1, address: 1, status: 1, invited: 1, primarySelection: 1, invitationCount: {
                         $size: {
                             $filter: {
                                 input: { $ifNull: ["$primarySelection", []] },

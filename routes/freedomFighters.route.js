@@ -21,8 +21,8 @@ const router = express.Router();
 // })
 
 
-router.route('/profilePhotoUpload')
-    .post(uploader.single('photo'), freedomFighterController.profilePhotoUpload)
+// router.route('/profilePhotoUpload')
+//     .post(uploader.single('photo'), freedomFighterController.profilePhotoUpload)
 
 
 router.route('/')

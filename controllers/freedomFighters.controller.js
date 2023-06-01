@@ -19,23 +19,23 @@ exports.profilePhotoUpload = async (req, res) => {
 
 // insert a new freedom fighter
 exports.insertFreedomFighter = async (req, res) => {
-    console.log('backend api called for insertion');
+    // console.log(req.body);
 
     try {
         const memberInfo = req.body;
-        memberInfo.photo = req?.file?.filename
-        // console.log(memberInfo);
+        // memberInfo.photo = req?.file?.filename
+        console.log('memberInfo:', req.body);
 
-        if (memberInfo?.officialRank) {
-            const officeRank = JSON.parse(memberInfo?.officialRank);
-            memberInfo.officialRank = officeRank
-        }
-        if (memberInfo?.freedomFighterRank) {
-            const fighterRank = JSON.parse(memberInfo?.freedomFighterRank);
-            memberInfo.freedomFighterRank = fighterRank
-        }
-        // console.log('printing file Name');
-        // console.log(memberInfo)
+        //     if (memberInfo?.officialRank) {
+        //         const officeRank = JSON.parse(memberInfo?.officialRank);
+        //         memberInfo.officialRank = officeRank
+        //     }
+        //     if (memberInfo?.freedomFighterRank) {
+        //         const fighterRank = JSON.parse(memberInfo?.freedomFighterRank);
+        //         memberInfo.freedomFighterRank = fighterRank
+        //     }
+        //     // console.log('printing file Name');
+        //     // console.log(memberInfo)
 
         const freedomFighter = await insertFreedomFighterService(memberInfo)
         console.log(freedomFighter);

@@ -1,5 +1,6 @@
 const express = require('express')
 const categoryController = require('../controllers/memberCategory.controller')
+const verifyToken = require('../middleware/verifyToken')
 
 
 const router = express.Router()
@@ -10,7 +11,7 @@ router.route('/')
 
 router.route('/:categoryId')
     .patch(categoryController.updatepriorityCriteria)
-    .delete(categoryController.deleteMemberCategoryById)
+    .delete(verifyToken, categoryController.deleteMemberCategoryById)
 
 
 

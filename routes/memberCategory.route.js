@@ -10,7 +10,7 @@ router.route('/')
     .post(categoryController.addMemberCategory)
 
 router.route('/:categoryId')
-    .patch(categoryController.updatepriorityCriteria)
+    .patch(verifyToken, categoryController.updatepriorityCriteria)
     .delete(verifyToken, categoryController.deleteMemberCategoryById)
 
 

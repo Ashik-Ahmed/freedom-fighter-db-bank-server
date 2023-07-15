@@ -7,9 +7,9 @@ const verifyToken = require('../middleware/verifyToken');
 const router = express.Router();
 
 router.route('/')
-    .get(eventController.getAllevents)
+    .get(verifyToken, eventController.getAllevents)
     .post(verifyToken, authorization('admin'), eventController.addEvent)
-    .patch(verifyToken, eventController.updateEvent)
+    .patch(verifyToken, authorization('admin'), eventController.updateEvent)
 
 router.route('/:id')
     .delete(verifyToken, authorization('admin'), eventController.deleteEvent)

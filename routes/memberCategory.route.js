@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.route('/')
     .get(categoryController.getAllCategories)
-    .post(categoryController.addMemberCategory)
+    .post(verifyToken, categoryController.addMemberCategory)
 
 router.route('/:categoryId')
     .patch(verifyToken, categoryController.updatepriorityCriteria)

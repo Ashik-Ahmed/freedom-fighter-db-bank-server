@@ -6,7 +6,7 @@ const verifyToken = require('../middleware/verifyToken')
 const router = express.Router()
 
 router.route('/')
-    .get(categoryController.getAllCategories)
+    .get(verifyToken, categoryController.getAllCategories)
     .post(verifyToken, categoryController.addMemberCategory)
 
 router.route('/:categoryId')

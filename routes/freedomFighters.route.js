@@ -2,6 +2,8 @@ const express = require('express');
 const freedomFighterController = require('../controllers/freedomFighters.controller');
 const complaintController = require('../controllers/complaint.controller')
 const uploader = require('../middleware/uploader');
+const verifyToken = require('../middleware/verifyToken');
+const authorization = require('../middleware/authorization');
 
 const router = express.Router();
 
@@ -28,12 +30,12 @@ const router = express.Router();
 router.route('/')
     // .post(uploader.single('file'), freedomFighterController.insertFreedomFighter)
     .post(freedomFighterController.insertFreedomFighter)
-    .get(freedomFighterController.getFreedomFighters)
+    .get(verifyToken, freedomFighterController.getFreedomFighters)
 
 router.route('/:id')
     .get(freedomFighterController.getSingleFreedomFighter)
     .patch(freedomFighterController.updateFreedomFighterById)
-    .delete(freedomFighterController.deleteFreedomFighterById)
+    .delete(verifyToken, authorization("admin"), freedomFighterController.deleteFreedomFighterById)
 
 
 router.route('/:id/comlaint')

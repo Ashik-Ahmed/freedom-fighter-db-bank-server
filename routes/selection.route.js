@@ -7,10 +7,10 @@ const router = express.Router();
 
 
 router.route('/')
-    .get(selectionController.selectFreedomFighters)
+    .get(verifyToken, selectionController.selectFreedomFighters)
 
 router.route('/primary-selection')
-    .get(selectionController.getPrimarySelectedMembers)
+    .get(verifyToken, selectionController.getPrimarySelectedMembers)
     .patch(verifyToken, selectionController.temporarySelected)
 
 router.route('/verification-update')

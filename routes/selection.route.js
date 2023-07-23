@@ -14,10 +14,10 @@ router.route('/primary-selection')
     .patch(verifyToken, selectionController.temporarySelected)
 
 router.route('/verification-update')
-    .patch(selectionController.verificationUpdate)
+    .patch(verifyToken, selectionController.verificationUpdate)
 
 router.route('/delete-primary-selected')
-    .patch(selectionController.deletePrimarySelectedMember)
+    .patch(verifyToken, selectionController.deletePrimarySelectedMember)
 
 router.route('/final-selection')
     .get(selectionController.getFinalSelectedMembers)

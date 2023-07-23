@@ -20,7 +20,7 @@ router.route('/delete-primary-selected')
     .patch(verifyToken, selectionController.deletePrimarySelectedMember)
 
 router.route('/final-selection')
-    .get(selectionController.getFinalSelectedMembers)
+    .get(verifyToken, selectionController.getFinalSelectedMembers)
 
 router.route('/send-invitation-mail')
     .post(selectionController.sendInvitationmail)

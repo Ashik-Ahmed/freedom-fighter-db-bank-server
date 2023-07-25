@@ -1,6 +1,7 @@
 const express = require('express')
 const categoryController = require('../controllers/memberCategory.controller')
 const verifyToken = require('../middleware/verifyToken')
+const authorization = require('../middleware/authorization')
 
 
 const router = express.Router()
@@ -10,8 +11,8 @@ router.route('/')
     .post(verifyToken, categoryController.addMemberCategory)
 
 router.route('/:categoryId')
-    .patch(verifyToken, categoryController.updatepriorityCriteria)
-    .delete(verifyToken, categoryController.deleteMemberCategoryById)
+    .patch(verifyToken, authorization("admin"), categoryController.updatepriorityCriteria)
+    .delete(verifyToken, authorization("admin"), categoryController.deleteMemberCategoryById)
 
 
 
